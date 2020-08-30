@@ -1,0 +1,21 @@
+{
+  "name": "ozone",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/app.js",
+  "scripts": {
+    "dev": "tsc && node dist/app.js",
+    "nodemon": "nodemon -V -w src -e ts,tsx -x \"yarn dev\"",
+    "compose": "yarn install && yarn nodemon"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "graphql": "^15.3.0",
+    "mongoose": "^5.10.2",
+    "nodemon": "^2.0.4",
+    "typescript": "^4.0.2"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.7.36"
+  }
+}

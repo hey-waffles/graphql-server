@@ -1,10 +1,13 @@
 import express from 'express';
+import { initializeDatabase } from './models/database';
 
 const app = express();
 const port = 3000; 
 app.get('/', (req, res) => {
   res.send('Hello! Everything is running as it should.');
 });
+
+initializeDatabase();
 
 app.listen(port, err => {
   if (err) {

@@ -1,18 +1,33 @@
-import express from 'express';
-import { initializeDatabase } from './models/database';
+import { ApolloServer } from "apollo-server-express";
+import Express from "express";
+import "reflect-metadata";
+import { buildSchema } from "type-graphql";
+import { connect } from "mongoose";
+import { EgotismResolver } from './models/resolver/egotisms';
 
-const app = express();
-const port = 3000; 
-app.get('/', (req, res) => {
-  res.send('Hello! Everything is running as it should.');
-});
 
-initializeDatabase();
+const main = async () => {
+  const schema = await buildSchema({
+    resolvers: [ EgotismResolver ],
+    emitSchemaFile: true,
+    validate: false,
+  });
 
-app.listen(port, err => {
-  if (err) {
-    return console.error(err);
-  }
+  // create mongoose connection
+  const mongoose = await connect(
+    process.env.MONGO_ADDRESS!, 
+    {useNewUrlParser: true, useUnifiedTopology: true}
+  );
+  await mongoose.connection;
 
-  return console.log(`server is listening on ${port}`);
-});
+  const server = new ApolloServer({schema});
+  const app = Express();
+  server.applyMiddleware({app});
+  app.listen({ port: 3000 }, () => {
+    console.log(`🚀 Server ready and listening!`);
+  })
+};
+
+main().catch((error)=>{
+  console.log(error, 'error');
+})

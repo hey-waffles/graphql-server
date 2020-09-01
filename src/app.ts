@@ -3,12 +3,14 @@ import Express from "express";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { connect } from "mongoose";
+import { ChannelResolver } from './models/resolver/channels';
 import { EgotismResolver } from './models/resolver/egotisms';
 
 
 const main = async () => {
+  // Schema for GraphQL
   const schema = await buildSchema({
-    resolvers: [ EgotismResolver ],
+    resolvers: [ ChannelResolver, EgotismResolver ],
     emitSchemaFile: true,
     validate: false,
   });
@@ -20,6 +22,7 @@ const main = async () => {
   );
   await mongoose.connection;
 
+  // Sets up a graphql server at /graphql
   const server = new ApolloServer({schema});
   const app = Express();
   server.applyMiddleware({app});

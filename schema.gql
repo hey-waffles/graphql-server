@@ -3,6 +3,20 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""The Channels used for specific Ozone purposes"""
+type Channels {
+  channelName: String!
+  discordChannelID: String!
+  id: ID!
+  isRPChannel: Boolean!
+  lastPulledAt: DateTime!
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
 """The Egotisms model"""
 type Egotisms {
   high: Int!
@@ -23,6 +37,7 @@ type Mutation {
 }
 
 type Query {
+  channels: [Channels!]!
   egotismByID(id: String!): Egotisms!
   egotisms: [Egotisms!]!
 }

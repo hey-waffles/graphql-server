@@ -1,6 +1,6 @@
 import { ObjectType, Field} from "type-graphql";
-import { prop as Property, getModelForClass } from "@typegoose/typegoose";
-import { Entities } from "./Entities";
+import { prop, getModelForClass } from "@typegoose/typegoose";
+import { Entity } from "./Entities";
 
 /**
  * The model collecting Channels Ozone is connected to for multiple purposes
@@ -13,21 +13,21 @@ import { Entities } from "./Entities";
  * @var lastPulledAt The datetime object that this was last pulled from  
  */
 @ObjectType({ description: "The Channels used for specific Ozone purposes"})
-export class Channels extends Entities {
+export class Channels extends Entity {
   @Field()
-  @Property()
-  channelName: String;
+  @prop({ required: true })
+  channelName: string;
 
   @Field()
-  @Property()
-  discordChannelID: String;
+  @prop({ required: true })
+  discordChannelID: string;
 
   @Field()
-  @Property()
-  isRPChannel: Boolean;
+  @prop({ default: false })
+  isRPChannel: boolean;
 
   @Field()
-  @Property()
+  @prop({ default: new Date(0) })
   lastPulledAt: Date;
 }
 

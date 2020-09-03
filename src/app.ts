@@ -5,12 +5,13 @@ import { buildSchema } from "type-graphql";
 import { connect } from "mongoose";
 import { ChannelResolver } from './models/resolver/channels';
 import { EgotismResolver } from './models/resolver/egotisms';
+import { PostResolver } from "./models/resolver/posts";
 
 
 const main = async () => {
   // Schema for GraphQL
   const schema = await buildSchema({
-    resolvers: [ ChannelResolver, EgotismResolver ],
+    resolvers: [ ChannelResolver, EgotismResolver, PostResolver ],
     emitSchemaFile: true,
     validate: false,
   });

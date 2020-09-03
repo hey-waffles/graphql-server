@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Arg } from "type-graphql";
 import { Channels, ChannelsModel } from "../entities/Channels";
 import { BaseResolver } from "./resolver";
-import { ChannelsInput } from "./types/channels-input";
+import { ChannelsInput } from "./types/channel-input";
 
 
 @Resolver()

@@ -5,11 +5,12 @@
 
 """The Channels used for specific Ozone purposes"""
 type Channels {
+  _id: ID!
   channelName: String!
   discordChannelID: String!
-  id: ID!
   isRPChannel: Boolean!
-  lastPulledAt: DateTime!
+  rpLastPulledAt: DateTime!
+  rpSceneID: String
 }
 
 input ChannelsInput {
@@ -23,6 +24,12 @@ input ChannelsInput {
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
 scalar DateTime
+
+type DeleteResponse {
+  deletedCount: Float
+  n: Float
+  ok: Float
+}
 
 """The Egotisms model"""
 type Egotisms {
@@ -41,12 +48,43 @@ input EgotismsInput {
 type Mutation {
   deleteChannel(id: String!): Boolean!
   deleteEgotism(id: String!): Boolean!
+  deletePost(_id: String!): DeleteResponse!
   newChannel(data: ChannelsInput!): Channels!
   newEgotism(data: EgotismsInput!): Egotisms!
+  newPost(data: PostInput!): Post!
+}
+
+"""Roleplaying posts"""
+type Post {
+  _id: ID!
+  content: String!
+  discordAuthorID: String!
+  discordChannelID: String!
+  discordMessageID: String!
+  editDate: DateTime
+  isBorder: Boolean!
+  isRewind: Boolean!
+  postDate: DateTime!
+  sceneID: String
+  words: Int!
+}
+
+input PostInput {
+  content: String!
+  discordAuthorID: String!
+  discordChannelID: String!
+  discordMessageID: String!
+  editDate: DateTime
+  isBorder: Boolean = false
+  isRewind: Boolean = false
+  postDate: DateTime!
+  sceneID: String
+  words: Float!
 }
 
 type Query {
   channels: [Channels!]!
   egotismByID(id: String!): Egotisms!
   egotisms: [Egotisms!]!
+  posts(limit: Int = 25, skip: Int = 0): [Post!]!
 }

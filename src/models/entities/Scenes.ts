@@ -8,6 +8,7 @@ import { prop, getModelForClass } from "@typegoose/typegoose";
  * 
  * @var title The title of the scene
  * @var description A description of the scene
+ * @var storyID The story this scene belongs to
  * @var discordAuthorIDs The authors of the scene
  * @var words The word count of the scene
  * @var rewindWords The word count including posts that were rewound
@@ -25,6 +26,10 @@ export class Scene extends Entity {
   @Field({ nullable: true })
   @prop({ default: "" })
   description?: string;
+
+  @Field()
+  @prop({ required: true })
+  storyID: string;
   
   @Field(_type => [String])
   @prop({ default: [] })

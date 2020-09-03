@@ -1,10 +1,11 @@
 import { ReturnModelType } from "@typegoose/typegoose";
+import { Options } from "./types/base-input";
 
 export class BaseResolver {
   protected model: ReturnModelType<any>
 
-  async resolvers() {
-    return await this.model.find();
+  async resolvers(options?: Options) {
+    return await this.model.find({}, null, options);
   }
 
   async newResolver(args: any) {
@@ -14,7 +15,7 @@ export class BaseResolver {
 
   // TODO - does not work!
   async deleteResolver(args: any) {
-    await this.model.deleteOne(args);
-    return true;
+    const deleteResult = await this.model.deleteOne(args);
+    return deleteResult;
   }
 }

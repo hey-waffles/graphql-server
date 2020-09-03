@@ -28,7 +28,11 @@ export class Channels extends Entity {
 
   @Field()
   @prop({ default: new Date(0) })
-  lastPulledAt: Date;
+  rpLastPulledAt: Date;
+
+  @Field({ nullable: true })
+  @prop()
+  rpSceneID?: string;
 }
 
 export const ChannelsModel = getModelForClass(Channels);

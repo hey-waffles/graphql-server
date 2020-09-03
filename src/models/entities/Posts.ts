@@ -5,8 +5,8 @@ import { prop, getModelForClass } from "@typegoose/typegoose";
 /**
  * A roleplaying post
  * 
- * @var discordAuthorID The id of the author from discord. May be linked to the 'Authors' model
  * @var content The content of the post in markdown format
+ * @var discordAuthorID The id of the author from discord. May be linked to the 'Authors' model
  * @var discordChannelID The id of the Discord channel this was posted to
  * @var words The word count of the post
  * @var sceneID A reference to the scene that this post belongs to 
@@ -20,11 +20,11 @@ export class Post extends Entity {
 
   @Field()
   @prop({ required: true })
-  discordAuthorID: string;
+  content: string;
 
   @Field()
   @prop({ required: true })
-  content: string;
+  discordAuthorID: string;
 
   @Field()
   @prop({ required: true })
@@ -57,7 +57,6 @@ export class Post extends Entity {
   @Field( { nullable: true })
   @prop()
   editDate?: Date; 
-
 }
 
-export const EPostModel = getModelForClass(Post);
+export const PostModel = getModelForClass(Post);

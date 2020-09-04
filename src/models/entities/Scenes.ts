@@ -34,6 +34,14 @@ export class Scene extends Entity {
   @Field(_type => [String])
   @prop({ default: [] })
   discordAuthorIDs: string[]
+
+  @Field({ nullable: true })
+  @prop()
+  arcID?: string;
+
+  @Field(_type => Int, { nullable: true })
+  @prop()
+  order?: number;
   
   @Field(_type => Int)
   @prop({ default: 0 })

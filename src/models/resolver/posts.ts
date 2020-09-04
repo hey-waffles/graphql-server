@@ -10,9 +10,6 @@ import { Options } from "./types/base-input";
 export class PostResolver extends BaseResolver {
   protected model = PostModel;
 
-  // @Query(() => Post)
-  // async postByID(@Arg("_id")_id: string)
-
   @Query(() => [Post])
   async posts(@Args() options?: Options) {
     return super.resolvers(options);
@@ -22,6 +19,7 @@ export class PostResolver extends BaseResolver {
   async newPost(@Arg("data")data: PostInput): Promise<Post> {
     // Ensure author exists
     // Ensure channel exists
+    // Update scene, if any
 
     // Calculate words
     data.words = data.content.trim().split(/\s+/).length;
@@ -31,6 +29,6 @@ export class PostResolver extends BaseResolver {
 
   @Mutation(() => DeleteResponse)
   async deletePost(@Arg("_id") _id: string): Promise<DeleteResponse> {   
-    return super.deleteResolver({_id});
+    return super.deleteResolver(_id);
   }
 }

@@ -1,27 +1,27 @@
 import { Resolver, Query, Mutation, Arg } from "type-graphql";
-import { Scene, SceneModel } from "../entities/Scenes";
+import { Arc, ArcModel } from "../entities/Arcs";
 import { BaseResolver } from "./resolver";
-import { SceneInput } from "./types/scene-input";
+import { ArcInput } from "./types/arc-input";
 
 
 @Resolver()
-export class SceneResolver extends BaseResolver {
-  protected model = SceneModel;
+export class ArcResolver extends BaseResolver {
+  protected model = ArcModel;
 
-  @Query(() => [Scene])
-  async scenes() {
+  @Query(() => [Arc])
+  async arcs() {
     return super.resolvers();
   }
 
-  @Mutation(() => Scene)
-  async newScene(@Arg("data")data: SceneInput): Promise<Scene> {
+  @Mutation(() => Arc)
+  async newArc(@Arg("data")data: ArcInput): Promise<Arc> {
     // Update story, if any
     // Update arc, if any
     return super.newResolver(data);
   }
 
   @Mutation(() => Boolean)
-  async deleteScene(@Arg("_id") _id: string) {
+  async deleteArc(@Arg("_id") _id: string) {
     // Update story, if any
     // Update arc, if any
     return super.deleteResolver(_id);

@@ -1,6 +1,6 @@
 import { ObjectType, Field } from "type-graphql";
 import { Entity } from "./Entities";
-import { prop } from "@typegoose/typegoose";
+import { prop, getModelForClass } from "@typegoose/typegoose";
 
 /**
  * The authors for roleplaying
@@ -18,3 +18,5 @@ export class Author extends Entity {
   @prop({ required: true })
   discordUserID: string;
 }
+
+export const AuthorModel = getModelForClass(Author);

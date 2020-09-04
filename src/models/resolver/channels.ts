@@ -20,6 +20,6 @@ export class ChannelResolver extends BaseResolver {
 
   @Mutation(() => Boolean)
   async deleteChannel(@Arg("id") id: string) {
-    return super.deleteResolver({id});
+    return super.deleteResolver(id);
   }
 }

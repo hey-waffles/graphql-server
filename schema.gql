@@ -49,9 +49,11 @@ type Mutation {
   deleteChannel(id: String!): Boolean!
   deleteEgotism(id: String!): Boolean!
   deletePost(_id: String!): DeleteResponse!
+  deleteScene(_id: String!): Boolean!
   newChannel(data: ChannelsInput!): Channels!
   newEgotism(data: EgotismsInput!): Egotisms!
   newPost(data: PostInput!): Post!
+  newScene(data: SceneInput!): Scene!
 }
 
 """Roleplaying posts"""
@@ -87,4 +89,37 @@ type Query {
   egotismByID(id: String!): Egotisms!
   egotisms: [Egotisms!]!
   posts(limit: Int = 25, skip: Int = 0): [Post!]!
+  scenes: [Scene!]!
+}
+
+"""Roleplaying posts"""
+type Scene {
+  _id: ID!
+  arcID: String
+  description: String
+  discordAuthorIDs: [String!]!
+  driveLink: String
+  endDate: DateTime
+  inProgress: Boolean!
+  order: Int
+  rewindWords: Int!
+  startDate: DateTime
+  storyID: String!
+  title: String!
+  words: Int!
+}
+
+input SceneInput {
+  arcID: String
+  description: String = ""
+  discordAuthorIDs: [String!]
+  driveLink: String
+  endDate: DateTime
+  inProgress: Boolean = false
+  order: Int
+  rewindWords: Int
+  startDate: DateTime
+  storyID: String!
+  title: String!
+  words: Int
 }

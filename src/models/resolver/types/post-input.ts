@@ -16,34 +16,34 @@ import { Post } from "../../entities/Posts";
  */
 @InputType()
 export class PostInput implements Partial<Post> {
-  @Field()
-  content: string;
+  @Field({ nullable: true })
+  content?: string;
 
-  @Field()
-  discordAuthorID: string;
+  @Field({ nullable: true })
+  discordAuthorID?: string;
 
-  @Field()
-  discordChannelID: string;
+  @Field({ nullable: true })
+  discordChannelID?: string;
 
-  @Field()
-  discordMessageID: string;
+  @Field({ nullable: true })
+  discordMessageID?: string;
 
   // Words auto-calculated
-  @Field()
+  @Field({ nullable: true })
   words: number;
 
   @Field({ nullable: true })
   sceneID?: string;
 
   // isBorder auto-calculated
-  @Field()
-  isBorder: boolean = false;
+  @Field({ nullable: true })
+  isBorder?: boolean = false;
 
-  @Field()
-  isRewind: boolean = false;
+  @Field({ nullable: true })
+  isRewind?: boolean = false;
 
-  @Field()
-  postDate: Date;
+  @Field({ nullable: true })
+  postDate?: Date;
 
   @Field({ nullable: true })
   editDate?: Date;

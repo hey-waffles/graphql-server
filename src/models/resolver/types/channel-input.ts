@@ -10,16 +10,16 @@ import { Channel } from "../../entities/Channels";
  * @var lastPulledAt The last date this channel was scraped for roleplaying
  */
 @InputType()
-export class ChannelsInput implements Partial<Channel> {
-  @Field()
-  channelName: string;
+export class ChannelInput implements Partial<Channel> {
+  @Field({ nullable: true })
+  channelName?: string;
 
-  @Field()
-  discordChannelID: string;
+  @Field({ nullable: true })
+  discordChannelID?: string;
 
-  @Field()
-  isRPChannel: boolean;
+  @Field({ nullable: true })
+  isRPChannel?: boolean;
 
-  @Field()
-  lastPulledAt: Date;
+  @Field({ nullable: true })
+  lastPulledAt?: Date;
 }

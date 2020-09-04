@@ -15,11 +15,11 @@ type Arc {
 }
 
 input ArcInput {
-  description: String = ""
+  description: String
   order: Int
   rewindWords: Int
-  storyID: String!
-  title: String!
+  storyID: String
+  title: String
   words: Int
 }
 
@@ -31,8 +31,8 @@ type Author {
 }
 
 input AuthorInput {
-  discordUserID: String!
-  name: String = ""
+  discordUserID: String
+  name: String
 }
 
 """The Channels used for specific Ozone purposes"""
@@ -45,11 +45,11 @@ type Channel {
   rpSceneID: String
 }
 
-input ChannelsInput {
-  channelName: String!
-  discordChannelID: String!
-  isRPChannel: Boolean!
-  lastPulledAt: DateTime!
+input ChannelInput {
+  channelName: String
+  discordChannelID: String
+  isRPChannel: Boolean
+  lastPulledAt: DateTime
 }
 
 """
@@ -87,11 +87,17 @@ type Mutation {
   deleteStory(_id: String!): Boolean!
   newArc(data: ArcInput!): Arc!
   newAuthor(data: AuthorInput!): Author!
-  newChannel(data: ChannelsInput!): Channel!
+  newChannel(data: ChannelInput!): Channel!
   newEgotism(data: EgotismsInput!): Egotisms!
   newPost(data: PostInput!): Post!
   newScene(data: SceneInput!): Scene!
   newStory(data: StoryInput!): Story!
+  updateArc(_id: String!, data: ArcInput!): Arc!
+  updateAuthor(_id: String!, data: AuthorInput!): Author!
+  updateChannel(_id: String!, data: ChannelInput!): Channel!
+  updatePost(_id: String!, data: PostInput!): Post!
+  updateScene(_id: String!, data: SceneInput!): Scene!
+  updateStory(_id: String!, data: StoryInput!): Story!
 }
 
 """Roleplaying posts"""
@@ -110,16 +116,16 @@ type Post {
 }
 
 input PostInput {
-  content: String!
-  discordAuthorID: String!
-  discordChannelID: String!
-  discordMessageID: String!
+  content: String
+  discordAuthorID: String
+  discordChannelID: String
+  discordMessageID: String
   editDate: DateTime
   isBorder: Boolean = false
   isRewind: Boolean = false
-  postDate: DateTime!
+  postDate: DateTime
   sceneID: String
-  words: Float!
+  words: Float
 }
 
 type Query {
@@ -158,7 +164,7 @@ type Scene {
 
 input SceneInput {
   arcID: String
-  description: String = ""
+  description: String
   discordAuthorIDs: [String!]
   driveLink: String
   endDate: DateTime
@@ -166,8 +172,8 @@ input SceneInput {
   order: Int
   rewindWords: Int
   startDate: DateTime
-  storyID: String!
-  title: String!
+  storyID: String
+  title: String
   words: Int
 }
 
@@ -185,12 +191,12 @@ type Story {
 }
 
 input StoryInput {
-  description: String = ""
+  description: String
   discordAuthorIDs: [String!] = []
   driveLink: String
   endDate: DateTime
   rewindWords: Int = 0
   startDate: DateTime
-  title: String!
+  title: String
   words: Int = 0
 }

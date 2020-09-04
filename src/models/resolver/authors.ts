@@ -41,6 +41,19 @@ export class AuthorResolver extends BaseResolver {
   }
 
   /**
+   * Updates a single author document
+   * @param _id The id of the document to update
+   * @param data The data to replace in the document
+   */
+  @Mutation(() => Author)
+  async updateAuthor(
+    @Arg("_id") _id: string,
+    @Arg("data") data: AuthorInput
+  ): Promise<Author> {
+    return super.updateResolver(_id, data)
+  }
+
+  /**
    * Deletes a single author document
    * @param _id The id of the author document to delete
    */

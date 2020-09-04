@@ -37,6 +37,19 @@ export class StoryResolver extends BaseResolver {
   }
 
   /**
+   * Updates a single story document
+   * @param _id The id of the document to update
+   * @param data The data to replace in the document
+   */
+  @Mutation(() => Story)
+  async updateStory(
+    @Arg("_id") _id: string,
+    @Arg("data") data: StoryInput
+  ): Promise<Story> {
+    return super.updateResolver(_id, data)
+  }
+
+  /**
    * Deletes a single story document
    * @param _id The id of the story document to delete
    */

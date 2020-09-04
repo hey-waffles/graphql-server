@@ -41,9 +41,24 @@ export class PostResolver extends BaseResolver {
     // Update scene, if any
 
     // Calculate words
-    data.words = data.content.trim().split(/\s+/).length;
+    if(data.content) {
+      data.words = data.content!.trim().split(/\s+/).length;
+    }
     
     return super.newResolver(data);
+  }
+
+  /**
+   * Updates a single post document
+   * @param _id The id of the document to update
+   * @param data The data to replace in the document
+   */
+  @Mutation(() => Post)
+  async updatePost(
+    @Arg("_id") _id: string,
+    @Arg("data") data: PostInput
+  ): Promise<Post> {
+    return super.updateResolver(_id, data)
   }
 
   /**

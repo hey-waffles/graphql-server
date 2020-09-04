@@ -39,6 +39,19 @@ export class SceneResolver extends BaseResolver {
   }
 
   /**
+   * Updates a single scene document
+   * @param _id The id of the document to update
+   * @param data The data to replace in the document
+   */
+  @Mutation(() => Scene)
+  async updateScene(
+    @Arg("_id") _id: string,
+    @Arg("data") data: SceneInput
+  ): Promise<Scene> {
+    return super.updateResolver(_id, data)
+  }
+
+  /**
    * Deletes a single scene document
    * @param _id The id of the scene document to delete
    */

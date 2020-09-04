@@ -41,7 +41,9 @@ export class PostResolver extends BaseResolver {
     // Update scene, if any
 
     // Calculate words
-    data.words = data.content.trim().split(/\s+/).length;
+    if(data.content) {
+      data.words = data.content!.trim().split(/\s+/).length;
+    }
     
     return super.newResolver(data);
   }

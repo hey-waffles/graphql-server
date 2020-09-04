@@ -111,16 +111,16 @@ type Post {
 }
 
 input PostInput {
-  content: String!
-  discordAuthorID: String!
-  discordChannelID: String!
-  discordMessageID: String!
+  content: String
+  discordAuthorID: String
+  discordChannelID: String
+  discordMessageID: String
   editDate: DateTime
   isBorder: Boolean = false
   isRewind: Boolean = false
-  postDate: DateTime!
+  postDate: DateTime
   sceneID: String
-  words: Float!
+  words: Float
 }
 
 type Query {
@@ -159,7 +159,7 @@ type Scene {
 
 input SceneInput {
   arcID: String
-  description: String = ""
+  description: String
   discordAuthorIDs: [String!]
   driveLink: String
   endDate: DateTime
@@ -167,8 +167,8 @@ input SceneInput {
   order: Int
   rewindWords: Int
   startDate: DateTime
-  storyID: String!
-  title: String!
+  storyID: String
+  title: String
   words: Int
 }
 
@@ -186,12 +186,12 @@ type Story {
 }
 
 input StoryInput {
-  description: String = ""
+  description: String
   discordAuthorIDs: [String!] = []
   driveLink: String
   endDate: DateTime
   rewindWords: Int = 0
   startDate: DateTime
-  title: String!
+  title: String
   words: Int = 0
 }

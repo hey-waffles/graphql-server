@@ -11,15 +11,15 @@ import { Channel } from "../../entities/Channels";
  */
 @InputType()
 export class ChannelsInput implements Partial<Channel> {
-  @Field()
-  channelName: string;
+  @Field({ nullable: true })
+  channelName?: string;
 
-  @Field()
-  discordChannelID: string;
+  @Field({ nullable: true })
+  discordChannelID?: string;
 
-  @Field()
-  isRPChannel: boolean;
+  @Field({ nullable: true })
+  isRPChannel?: boolean;
 
-  @Field()
-  lastPulledAt: Date;
+  @Field({ nullable: true })
+  lastPulledAt?: Date;
 }

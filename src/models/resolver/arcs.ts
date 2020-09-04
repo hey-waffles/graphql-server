@@ -39,6 +39,20 @@ export class ArcResolver extends BaseResolver {
   }
 
   /**
+   * 
+   * @param _id The id of the arc document to update
+   * @param data 
+   */
+  @Mutation(() => Arc)
+  async updateArc(
+    @Arg("_id") _id: string,
+    @Arg("data") data: ArcInput
+  ): Promise<Arc> {
+    data.title = "title";
+    return super.updateResolver(_id, data)
+  }
+
+  /**
    * Deletes a single arc document
    * @param _id The id of the arc document to delete
    */

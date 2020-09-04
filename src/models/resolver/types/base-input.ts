@@ -9,7 +9,7 @@ import { Min, Max } from "class-validator";
 @ArgsType()
 export class BaseArgs {
   @Field({ nullable: true })
-  _id: string;
+  _id?: string;
 }
 
 /**

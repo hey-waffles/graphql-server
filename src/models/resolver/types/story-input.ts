@@ -16,24 +16,24 @@ import { MinLength } from "class-validator";
  */
 @InputType()
 export class StoryInput implements Partial<Story> {
-  @Field()
+  @Field({ nullable: true })
   @MinLength(3)
-  title: string
+  title?: string
   
-  @Field()
-  description: string = "";
+  @Field({ nullable: true })
+  description?: string;
 
   // DiscordAuthorIDs are auto-calculated
   @Field(_type => [String])
-  discordAuthorIDs: string[] = [];
+  discordAuthorIDs?: string[] = [];
 
   // Words are auto-calculated
   @Field(_type => Int)
-  words: number = 0;
+  words?: number = 0;
 
   // Rewind Words are auto-calculated
   @Field(_type => Int)
-  rewindWords: number = 0;
+  rewindWords?: number = 0;
   
   // Start date is auto calculated
   @Field({ nullable: true })

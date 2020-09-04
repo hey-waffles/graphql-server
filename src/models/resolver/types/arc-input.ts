@@ -13,17 +13,17 @@ import { Arc } from "../../entities/Arcs";
  */
 @InputType()
 export class ArcInput implements Partial<Arc> {
-  @Field()
-  title: string;
+  @Field({nullable: true})
+  title?: string;
 
-  @Field()
-  description: string = "";
+  @Field({nullable: true})
+  description?: string;
 
   @Field(_type => Int, { nullable: true })
   order?: number;
 
-  @Field()
-  storyID: string;
+  @Field({ nullable: true })
+  storyID?: string;
 
   @Field(_type => Int, { nullable: true })
   words?: number;

@@ -1,5 +1,7 @@
 import { ReturnModelType } from "@typegoose/typegoose";
 import { Options } from "./types/base-input";
+import { validate } from "class-validator";
+import { UserInputError } from "apollo-server-express";
 
 export class BaseResolver {
   protected model: ReturnModelType<any>
@@ -24,23 +26,34 @@ export class BaseResolver {
   }
 
   /**
-   * Creates a new object from the given data
+   * Valdiates and creates a new object from the given data
    * 
    * @param data The data to save into the model
    */
   async newResolver(data: any) {
+    const errors = await validate(data);
+    if (errors.length > 0) {
+      throw new UserInputError(errors.toString());
+    }
+
     const resolver = (await this.model.create(data)).save();
     return resolver;
   }
 
   /**
-   * Updates a single document
+   * Validates and updates a single document
    * 
    * @param _id The id of the document to update
    * @param data The data to change in the document
    */
   async updateResolver(_id: string, data: any) {
-    return (await this.model.findByIdAndUpdate(_id, data));
+    const errors = await validate(data);
+    if (errors.length > 0) {
+      throw new UserInputError(errors.toString());
+    }
+
+    // TODO - needs to return updated model
+    return await this.model.findByIdAndUpdate(_id, data);
   }
 
   /**
@@ -49,7 +62,12 @@ export class BaseResolver {
    * @param filters Object that filters what data is updated
    * @param options Options that change what's updated
    */
-  async updateResolvers(filters?: any, options?: Options) {
+  async updateResolvers(data: any, filters?: any, options?: Options) {
+    const errors = await validate(data);
+    if (errors.length > 0) {
+      throw new UserInputError(errors.toString());
+    }
+
     return await this.model.update(filters, null, options);
   }
 

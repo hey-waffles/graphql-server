@@ -20,19 +20,19 @@ import { MinLength } from "class-validator";
  */
 @InputType()
 export class SceneInput implements Partial<Scene> {
-  @Field()
+  @Field({ nullable: true })
   @MinLength(3)
-  title: string;
+  title?: string;
 
-  @Field()
-  description: string = "";
+  @Field({ nullable: true })
+  description?: string;
 
-  @Field()
-  storyID: string;
+  @Field({ nullable: true })
+  storyID?: string;
 
   // Discord author ids are auto-calculated
   @Field(_type => [String], { nullable: true })
-  discordAuthorIDs: string[];
+  discordAuthorIDs?: string[];
 
   @Field({ nullable: true })
   arcID?: string;
@@ -48,8 +48,8 @@ export class SceneInput implements Partial<Scene> {
   @Field(_type => Int, { nullable: true })
   rewindWords?: number;
 
-  @Field()
-  inProgress: boolean = false;
+  @Field({ nullable: true })
+  inProgress?: boolean = false;
 
   // Start Date is auto calculated
   @Field({ nullable: true })

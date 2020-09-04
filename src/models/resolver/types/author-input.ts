@@ -9,9 +9,9 @@ import { Author } from "../../entities/Authors";
  */
 @InputType()
 export class AuthorInput implements Partial<Author> {
-  @Field()
-  name: string = "";
+  @Field({ nullable: true })
+  name?: string;
   
-  @Field()
-  discordUserID: string;
+  @Field({ nullable: true })
+  discordUserID?: string;
 }

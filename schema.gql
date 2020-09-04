@@ -15,11 +15,11 @@ type Arc {
 }
 
 input ArcInput {
-  description: String = ""
+  description: String
   order: Int
   rewindWords: Int
-  storyID: String!
-  title: String!
+  storyID: String
+  title: String
   words: Int
 }
 
@@ -31,8 +31,8 @@ type Author {
 }
 
 input AuthorInput {
-  discordUserID: String!
-  name: String = ""
+  discordUserID: String
+  name: String
 }
 
 """The Channels used for specific Ozone purposes"""
@@ -46,10 +46,10 @@ type Channel {
 }
 
 input ChannelsInput {
-  channelName: String!
-  discordChannelID: String!
-  isRPChannel: Boolean!
-  lastPulledAt: DateTime!
+  channelName: String
+  discordChannelID: String
+  isRPChannel: Boolean
+  lastPulledAt: DateTime
 }
 
 """
@@ -92,6 +92,7 @@ type Mutation {
   newPost(data: PostInput!): Post!
   newScene(data: SceneInput!): Scene!
   newStory(data: StoryInput!): Story!
+  updateArc(_id: String!, data: ArcInput!): Arc!
 }
 
 """Roleplaying posts"""

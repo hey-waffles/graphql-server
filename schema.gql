@@ -45,7 +45,7 @@ type Channel {
   rpSceneID: String
 }
 
-input ChannelsInput {
+input ChannelInput {
   channelName: String
   discordChannelID: String
   isRPChannel: Boolean
@@ -87,12 +87,17 @@ type Mutation {
   deleteStory(_id: String!): Boolean!
   newArc(data: ArcInput!): Arc!
   newAuthor(data: AuthorInput!): Author!
-  newChannel(data: ChannelsInput!): Channel!
+  newChannel(data: ChannelInput!): Channel!
   newEgotism(data: EgotismsInput!): Egotisms!
   newPost(data: PostInput!): Post!
   newScene(data: SceneInput!): Scene!
   newStory(data: StoryInput!): Story!
   updateArc(_id: String!, data: ArcInput!): Arc!
+  updateAuthor(_id: String!, data: AuthorInput!): Author!
+  updateChannel(_id: String!, data: ChannelInput!): Channel!
+  updatePost(_id: String!, data: PostInput!): Post!
+  updateScene(_id: String!, data: SceneInput!): Scene!
+  updateStory(_id: String!, data: StoryInput!): Story!
 }
 
 """Roleplaying posts"""

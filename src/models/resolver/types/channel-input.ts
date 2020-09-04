@@ -10,7 +10,7 @@ import { Channel } from "../../entities/Channels";
  * @var lastPulledAt The last date this channel was scraped for roleplaying
  */
 @InputType()
-export class ChannelsInput implements Partial<Channel> {
+export class ChannelInput implements Partial<Channel> {
   @Field({ nullable: true })
   channelName?: string;
 

@@ -49,6 +49,19 @@ export class PostResolver extends BaseResolver {
   }
 
   /**
+   * Updates a single post document
+   * @param _id The id of the document to update
+   * @param data The data to replace in the document
+   */
+  @Mutation(() => Post)
+  async updatePost(
+    @Arg("_id") _id: string,
+    @Arg("data") data: PostInput
+  ): Promise<Post> {
+    return super.updateResolver(_id, data)
+  }
+
+  /**
    * Deletes a single post document
    * @param _id The id of the post document to delete
    */

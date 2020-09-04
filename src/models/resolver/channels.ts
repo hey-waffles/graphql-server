@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Arg, Args } from "type-graphql";
 import { Channel, ChannelsModel } from "../entities/Channels";
 import { BaseResolver } from "./resolver";
-import { ChannelsInput } from "./types/channel-input";
+import { ChannelInput } from "./types/channel-input";
 import { Options } from "./types/base-input";
 
 
@@ -32,8 +32,21 @@ export class ChannelResolver extends BaseResolver {
    * @param data The data to use in a new channel document
    */
   @Mutation(() => Channel)
-  async newChannel(@Arg("data") data: ChannelsInput): Promise<Channel> {
+  async newChannel(@Arg("data") data: ChannelInput): Promise<Channel> {
     return super.newResolver(data);
+  }
+
+  /**
+   * Updates a single channel document
+   * @param _id The id of the document to update
+   * @param data The data to replace in the document
+   */
+  @Mutation(() => Channel)
+  async updateChannel(
+    @Arg("_id") _id: string,
+    @Arg("data") data: ChannelInput
+  ): Promise<Channel> {
+    return super.updateResolver(_id, data)
   }
 
   /**

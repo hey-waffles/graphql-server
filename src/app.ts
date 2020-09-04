@@ -7,12 +7,23 @@ import { ChannelResolver } from './models/resolver/channels';
 import { EgotismResolver } from './models/resolver/egotisms';
 import { PostResolver } from "./models/resolver/posts";
 import { SceneResolver } from "./models/resolver/scenes";
+import { AuthorResolver } from "./models/resolver/authors";
+import { ArcResolver } from "./models/resolver/arcs";
+import { StoryResolver } from "./models/resolver/stories";
 
 
 const main = async () => {
   // Schema for GraphQL
   const schema = await buildSchema({
-    resolvers: [ ChannelResolver, EgotismResolver, PostResolver, SceneResolver ],
+    resolvers: [
+      ArcResolver,
+      AuthorResolver,
+      ChannelResolver,
+      EgotismResolver,
+      PostResolver,
+      SceneResolver,
+      StoryResolver,
+    ],
     emitSchemaFile: true,
     validate: false,
   });

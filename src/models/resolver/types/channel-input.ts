@@ -1,9 +1,9 @@
 import { InputType, Field } from "type-graphql";
-import { Channels } from "../../entities/Channels";
+import { Channel } from "../../entities/Channels";
 
 
 @InputType()
-export class ChannelsInput implements Partial<Channels> {
+export class ChannelsInput implements Partial<Channel> {
   @Field()
   channelName: string;
 

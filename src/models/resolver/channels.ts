@@ -1,25 +1,47 @@
-import { Resolver, Query, Mutation, Arg } from "type-graphql";
-import { Channels, ChannelsModel } from "../entities/Channels";
+import { Resolver, Query, Mutation, Arg, Args } from "type-graphql";
+import { Channel, ChannelsModel } from "../entities/Channels";
 import { BaseResolver } from "./resolver";
 import { ChannelsInput } from "./types/channel-input";
+import { Options } from "./types/base-input";
 
 
 @Resolver()
 export class ChannelResolver extends BaseResolver {
   protected model = ChannelsModel;
 
-  @Query(() => [Channels])
-  async channels() {
-    return super.resolvers();
+  /**
+   * Fetches an Channel document matching the given id
+   * @param _id The id of the Channel document to return
+   */
+  @Query(() => Channel)
+  async channel(@Arg("_id") _id: string): Promise<Channel> {
+    return super.resolver(_id);
   }
 
-  @Mutation(() => Channels)
-  async newChannel(@Arg("data")data: ChannelsInput): Promise<Channels> {
+  /**
+   * Fetches the channel documents by the given filters and options
+   * @param options The options to control the format of the data returned
+   */
+  @Query(() => [Channel])
+  async channels(@Args() options: Options) {
+    return super.resolvers(null, options);
+  }
+
+  /**
+   * Creates a new channel document
+   * @param data The data to use in a new channel document
+   */
+  @Mutation(() => Channel)
+  async newChannel(@Arg("data") data: ChannelsInput): Promise<Channel> {
     return super.newResolver(data);
   }
 
+  /**
+   * Deletes a single channel document
+   * @param _id The id of the channel document to delete
+   */
   @Mutation(() => Boolean)
-  async deleteChannel(@Arg("id") id: string) {
-    return super.deleteResolver(id);
+  async deleteChannel(@Arg("_id") _id: string) {
+    return super.deleteResolver(_id);
   }
 }

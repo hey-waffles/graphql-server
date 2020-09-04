@@ -17,7 +17,7 @@ import { prop, getModelForClass } from "@typegoose/typegoose";
  * @var endDate The latest post date and time of the scene
  * @var driveLink The link to the compiled scene in Google Drive
  */
-@ObjectType({ description: "Roleplaying posts" })
+@ObjectType({ description: "Roleplaying scenes" })
 export class Scene extends Entity {
   @Field()
   @prop({ required: true })

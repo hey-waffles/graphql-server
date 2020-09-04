@@ -13,7 +13,7 @@ import { Entity } from "./Entities";
  * @var lastPulledAt The datetime object that this was last pulled from  
  */
 @ObjectType({ description: "The Channels used for specific Ozone purposes"})
-export class Channels extends Entity {
+export class Channel extends Entity {
   @Field()
   @prop({ required: true })
   channelName: string;
@@ -35,4 +35,4 @@ export class Channels extends Entity {
   rpSceneID?: string;
 }
 
-export const ChannelsModel = getModelForClass(Channels);
+export const ChannelsModel = getModelForClass(Channel);

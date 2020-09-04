@@ -3,8 +3,40 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""An arc connects a collection of scenes within a story"""
+type Arc {
+  _id: ID!
+  description: String!
+  order: Int
+  rewindWords: Int
+  storyID: String!
+  title: String!
+  words: Int
+}
+
+input ArcInput {
+  description: String = ""
+  order: Int
+  rewindWords: Int
+  storyID: String!
+  title: String!
+  words: Int
+}
+
+"""Roleplaying Authors"""
+type Author {
+  _id: ID!
+  discordUserID: String!
+  name: String!
+}
+
+input AuthorInput {
+  discordAuthorID: String!
+  name: String = ""
+}
+
 """The Channels used for specific Ozone purposes"""
-type Channels {
+type Channel {
   _id: ID!
   channelName: String!
   discordChannelID: String!
@@ -46,14 +78,20 @@ input EgotismsInput {
 }
 
 type Mutation {
-  deleteChannel(id: String!): Boolean!
+  deleteArc(_id: String!): Boolean!
+  deleteAuthor(_id: String!): Boolean!
+  deleteChannel(_id: String!): Boolean!
   deleteEgotism(id: String!): Boolean!
   deletePost(_id: String!): DeleteResponse!
   deleteScene(_id: String!): Boolean!
-  newChannel(data: ChannelsInput!): Channels!
+  deleteStory(_id: String!): Boolean!
+  newArc(data: ArcInput!): Arc!
+  newAuthor(data: AuthorInput!): Author!
+  newChannel(data: ChannelsInput!): Channel!
   newEgotism(data: EgotismsInput!): Egotisms!
   newPost(data: PostInput!): Post!
   newScene(data: SceneInput!): Scene!
+  newStory(data: StoryInput!): Story!
 }
 
 """Roleplaying posts"""
@@ -85,14 +123,23 @@ input PostInput {
 }
 
 type Query {
-  channels: [Channels!]!
+  arc(_id: String!): Arc!
+  arcs(limit: Int = 25, skip: Int = 0): [Arc!]!
+  author(_id: String!): Author!
+  authors(limit: Int = 25, skip: Int = 0): [Author!]!
+  channel(_id: String!): Channel!
+  channels(limit: Int = 25, skip: Int = 0): [Channel!]!
   egotismByID(id: String!): Egotisms!
   egotisms: [Egotisms!]!
+  post(_id: String!): Post!
   posts(limit: Int = 25, skip: Int = 0): [Post!]!
-  scenes: [Scene!]!
+  scene(_id: String!): Scene!
+  scenes(limit: Int = 25, skip: Int = 0): [Scene!]!
+  Stories(limit: Int = 25, skip: Int = 0): [Story!]!
+  story(_id: String!): Story!
 }
 
-"""Roleplaying posts"""
+"""Roleplaying scenes"""
 type Scene {
   _id: ID!
   arcID: String
@@ -122,4 +169,23 @@ input SceneInput {
   storyID: String!
   title: String!
   words: Int
+}
+
+"""A roleplaying story"""
+type Story {
+  _id: ID!
+  description: String!
+  discordAuthorIDs: [String!]!
+  driveLink: String
+  lastPostAt: DateTime
+  rewindWords: Int!
+  startDate: DateTime
+  title: String!
+  words: Int!
+}
+
+input StoryInput {
+  description: String = ""
+  driveLink: String
+  title: String!
 }

@@ -24,7 +24,7 @@ export class StoryInput implements Partial<Story> {
   description: string = "";
 
   // DiscordAuthorIDs are auto-calculated
-  @Field()
+  @Field(_type => [String])
   discordAuthorIDs: string[] = [];
 
   // Words are auto-calculated

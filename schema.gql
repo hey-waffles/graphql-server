@@ -186,6 +186,11 @@ type Story {
 
 input StoryInput {
   description: String = ""
+  discordAuthorIDs: [String!] = []
   driveLink: String
+  endDate: DateTime
+  rewindWords: Int = 0
+  startDate: DateTime
   title: String!
+  words: Int = 0
 }

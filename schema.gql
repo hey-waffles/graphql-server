@@ -3,6 +3,66 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""An arc connects a collection of scenes within a story"""
+type Arc {
+  _id: ID!
+  description: String!
+  order: Int
+  rewindWords: Int
+  storyID: String!
+  title: String!
+  words: Int
+}
+
+input ArcInput {
+  description: String = ""
+  order: Int
+  rewindWords: Int
+  storyID: String!
+  title: String!
+  words: Int
+}
+
+"""Roleplaying Authors"""
+type Author {
+  _id: ID!
+  discordUserID: String!
+  name: String!
+}
+
+input AuthorInput {
+  discordUserID: String!
+  name: String = ""
+}
+
+"""The Channels used for specific Ozone purposes"""
+type Channel {
+  _id: ID!
+  channelName: String!
+  discordChannelID: String!
+  isRPChannel: Boolean!
+  rpLastPulledAt: DateTime!
+  rpSceneID: String
+}
+
+input ChannelsInput {
+  channelName: String!
+  discordChannelID: String!
+  isRPChannel: Boolean!
+  lastPulledAt: DateTime!
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+type DeleteResponse {
+  deletedCount: Float
+  n: Float
+  ok: Float
+}
+
 """The Egotisms model"""
 type Egotisms {
   high: Int!
@@ -18,11 +78,119 @@ input EgotismsInput {
 }
 
 type Mutation {
+  deleteArc(_id: String!): Boolean!
+  deleteAuthor(_id: String!): Boolean!
+  deleteChannel(_id: String!): Boolean!
   deleteEgotism(id: String!): Boolean!
+  deletePost(_id: String!): DeleteResponse!
+  deleteScene(_id: String!): Boolean!
+  deleteStory(_id: String!): Boolean!
+  newArc(data: ArcInput!): Arc!
+  newAuthor(data: AuthorInput!): Author!
+  newChannel(data: ChannelsInput!): Channel!
   newEgotism(data: EgotismsInput!): Egotisms!
+  newPost(data: PostInput!): Post!
+  newScene(data: SceneInput!): Scene!
+  newStory(data: StoryInput!): Story!
+}
+
+"""Roleplaying posts"""
+type Post {
+  _id: ID!
+  content: String!
+  discordAuthorID: String!
+  discordChannelID: String!
+  discordMessageID: String!
+  editDate: DateTime
+  isBorder: Boolean!
+  isRewind: Boolean!
+  postDate: DateTime!
+  sceneID: String
+  words: Int!
+}
+
+input PostInput {
+  content: String!
+  discordAuthorID: String!
+  discordChannelID: String!
+  discordMessageID: String!
+  editDate: DateTime
+  isBorder: Boolean = false
+  isRewind: Boolean = false
+  postDate: DateTime!
+  sceneID: String
+  words: Float!
 }
 
 type Query {
+  arc(_id: String!): Arc!
+  arcs(limit: Int = 25, skip: Int = 0): [Arc!]!
+  author(_id: String!): Author!
+  authors(limit: Int = 25, skip: Int = 0): [Author!]!
+  channel(_id: String!): Channel!
+  channels(limit: Int = 25, skip: Int = 0): [Channel!]!
   egotismByID(id: String!): Egotisms!
   egotisms: [Egotisms!]!
+  post(_id: String!): Post!
+  posts(limit: Int = 25, skip: Int = 0): [Post!]!
+  scene(_id: String!): Scene!
+  scenes(limit: Int = 25, skip: Int = 0): [Scene!]!
+  Stories(limit: Int = 25, skip: Int = 0): [Story!]!
+  story(_id: String!): Story!
+}
+
+"""Roleplaying scenes"""
+type Scene {
+  _id: ID!
+  arcID: String
+  description: String
+  discordAuthorIDs: [String!]!
+  driveLink: String
+  endDate: DateTime
+  inProgress: Boolean!
+  order: Int
+  rewindWords: Int!
+  startDate: DateTime
+  storyID: String!
+  title: String!
+  words: Int!
+}
+
+input SceneInput {
+  arcID: String
+  description: String = ""
+  discordAuthorIDs: [String!]
+  driveLink: String
+  endDate: DateTime
+  inProgress: Boolean = false
+  order: Int
+  rewindWords: Int
+  startDate: DateTime
+  storyID: String!
+  title: String!
+  words: Int
+}
+
+"""A roleplaying story"""
+type Story {
+  _id: ID!
+  description: String!
+  discordAuthorIDs: [String!]!
+  driveLink: String
+  lastPostAt: DateTime
+  rewindWords: Int!
+  startDate: DateTime
+  title: String!
+  words: Int!
+}
+
+input StoryInput {
+  description: String = ""
+  discordAuthorIDs: [String!] = []
+  driveLink: String
+  endDate: DateTime
+  rewindWords: Int = 0
+  startDate: DateTime
+  title: String!
+  words: Int = 0
 }

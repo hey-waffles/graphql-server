@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Arg, Args } from "type-graphql";
-import { Arc, ArcModel } from "../entities/Arcs";
+import { Arc, ArcModel } from "../entities/Arc";
 import { BaseResolver } from "./resolver";
-import { ArcInput } from "./types/arc-input";
+import { ArcInput, ArcFilter } from "./types/arc-input";
 import { Options } from "./types/base-input";
 import { DeleteResponse } from "../entities/DeleteResponse";
 
@@ -25,8 +25,11 @@ export class ArcResolver extends BaseResolver {
    * Fetches the arc documents matching the filter and options
    */
   @Query(() => [Arc])
-  async arcs(@Args() options?: Options): Promise<Arc[]> {
-    return super.resolvers(null, options);
+  async arcs(
+    @Arg("filters") filters: ArcFilter,
+    @Args() options?: Options
+  ): Promise<Arc[]> {
+    return super.resolvers(filters, options);
   }
 
   /**

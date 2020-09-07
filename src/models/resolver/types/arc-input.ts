@@ -1,5 +1,5 @@
 import { InputType, Field, Int } from "type-graphql";
-import { Arc } from "../../entities/Arcs";
+import { Arc } from "../../entities/Arc";
 
 /**
  * Input for creating or updating arc documents
@@ -31,4 +31,10 @@ export class ArcInput implements Partial<Arc> {
   @Field(_type => Int, { nullable: true })
   rewindWords?: number;
 
+}
+
+@InputType()
+export class ArcFilter {
+  @Field({ nullable: true })
+  title?: string;
 }

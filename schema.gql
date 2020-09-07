@@ -14,6 +14,10 @@ type Arc {
   words: Int
 }
 
+input ArcFilter {
+  title: String
+}
+
 input ArcInput {
   description: String
   order: Int
@@ -130,7 +134,7 @@ input PostInput {
 
 type Query {
   arc(_id: String!): Arc!
-  arcs(limit: Int = 25, skip: Int = 0): [Arc!]!
+  arcs(filters: ArcFilter!, limit: Int = 25, skip: Int = 0): [Arc!]!
   author(_id: String!): Author!
   authors(limit: Int = 25, skip: Int = 0): [Author!]!
   channel(_id: String!): Channel!

@@ -156,34 +156,112 @@ function ensureDirectory(directoryPath: string) {
   });
 }
 
-function generateInput(entityName: string, entityComposition: EntityComposition) {
-  const fullInputDirectory = modelsFolder + inputsFolder;
+function parseField(fieldOptions: any, fieldType?: string) {
+  let field = "@Field( ";
+  if(fieldType) {
+    field += `${fieldType}, `
+  };
+  fieldOptions.nullable = true;
+  field += JSON.stringify(fieldOptions);
+  field += " )";
 
-  // Ensure folders exist
-  ensureDirectory(fullInputDirectory + generationFolder);
+  return field;
+}
 
-  const gqlImportSet = new Set(entityComposition.gqlImports);
+function parseImports(gqlImportArray: string[]) {
+  const gqlImportSet = new Set(gqlImportArray);
   gqlImportSet.delete("ObjectType");
   let gqlImports = "";
   gqlImportSet.forEach((gqlImport: string) => {
     gqlImports += `${gqlImport}, `;
   });
 
+  return gqlImports;
+}
+
+function buildFilter(field: string, name: string, type: string, mongooseFunction: string = "") {
+  let filterContents = `\t${field}\n\t${name}`;
+  
+  if (mongooseFunction) {
+    filterContents += `_\$${mongooseFunction}`;
+  }
+
+  filterContents += `?: ${type};\n`;
+  return filterContents;
+}
+
+function generateFilters(entityName: string, entityComposition: EntityComposition) {
+  const fullFilterDirectory = modelsFolder + filterFolder;
+
+  // Ensure folders exist
+  ensureDirectory(fullFilterDirectory + generationFolder);
+
+  const gqlImports = parseImports(entityComposition.gqlImports);
+  const imports = `import { ${gqlImports}InputType } from "type-graphql";\n`;
+
+  let classContents = "";
+  entityComposition.variables.forEach((clump: EntityClump) => {
+    const field = parseField(clump.fieldOptions, clump.fieldType);
+
+    classContents += buildFilter(field, clump.name, clump.type);
+
+
+    switch(clump.type.toLowerCase()) {
+      case "boolean":
+        // Nothing here
+        break;
+      case "string":
+        // Regex
+        classContents += buildFilter(field, clump.name, "string", "regex");
+        break;
+
+      case "date":
+      case "number":
+        classContents += buildFilter(field, clump.name, "number", "lte");
+        classContents += buildFilter(field, clump.name, "number", "lt");
+        classContents += buildFilter(field, clump.name, "number", "gt");
+        classContents += buildFilter(field, clump.name, "number", "gte");
+
+        break;
+    }
+  });
+
+  let classDefinition = `
+@InputType()
+export class ${entityName}Filter {
+  ${classContents}
+}
+  `;
+
+  const inputFileContents = `
+${imports}
+${classDefinition}
+  `;
+
+  console.log(inputFileContents);
+
+
+}
+
+function generateInput(entityName: string, entityComposition: EntityComposition) {
+  const fullInputDirectory = modelsFolder + inputsFolder;
+
+  // Ensure folders exist
+  ensureDirectory(fullInputDirectory + generationFolder);
+
+  const gqlImports = parseImports(entityComposition.gqlImports);
+  
   // Create header comments
   const header = fs.readFileSync("src/scripts/generate_gql/header.txt").toString();
   const imports = `
 import { ${gqlImports}InputType } from "type-graphql";
-import { ${entityName} } from "../../..${entitiesFolder}/${entityName}";
+import { ${entityName} } from "../..${entitiesFolder}/${entityName}";
   `;
 
   let variableClumps = "";
   entityComposition.variables.forEach((clump: EntityClump) => {
     // Builds out the field line
-    let field = "@Field( ";
-    if(clump.fieldType) {field += `${clump.fieldType}, `};
-    clump.fieldOptions.nullable = true;
-    field += JSON.stringify(clump.fieldOptions);
-    field += " )";
+    const field = parseField(clump.fieldOptions, clump.fieldType);
 
     // Builds the full variable clump
     const clumpCode = `
@@ -193,7 +271,7 @@ import { ${entityName} } from "../../..${entitiesFolder}/${entityName}";
     variableClumps += clumpCode;
   });
 
-  const className = `${entityName}GeneratedInput`;
+  const className = `${entityName}Input`;
 
   // Builds the class definition
   const classDefinition = `
@@ -211,37 +289,38 @@ ${classDefinition}
   // Outputs the file
   const filename = `${entityName.toLowerCase()}-input`;
   const outputFile = fs.openSync(
-    `${fullInputDirectory}${generationFolder}/${filename}.ts`,
+    `${fullInputDirectory}/${filename}.ts`,
     "w"
   );
   fs.writeSync(outputFile, inputFileContents)
   fs.closeSync(outputFile);
 
-  // Ensure that the base input exists
-  if (fs.existsSync(`${fullInputDirectory}/${filename}.ts`)) {
-    return;
-  }
+//   // Ensure that the base input exists
+//   if (fs.existsSync(`${fullInputDirectory}/${filename}.ts`)) {
+//     return;
+//   }
 
-  const baseInputFileContents = `
-import { InputType } from "type-graphql";
-import { ${className} } from ".${generationFolder}/${filename}";
+//   const baseInputFileContents = `
+// import { InputType } from "type-graphql";
+// import { ${className} } from ".${generationFolder}/${filename}";
 
-@InputType()
-export class ${entityName}Input extends ${className} {}
-  `;
+// @InputType()
+// export class ${entityName}Input extends ${className} {}
+//   `;
 
-  const baseOutputFile = fs.openSync(
-    `${fullInputDirectory}/${filename}.ts`,
-    "w"
-  );
-  fs.writeSync(baseOutputFile, baseInputFileContents)
-  fs.closeSync(baseOutputFile);
+//   const baseOutputFile = fs.openSync(
+//     `${fullInputDirectory}/${filename}.ts`,
+//     "w"
+//   );
+//   fs.writeSync(baseOutputFile, baseInputFileContents)
+//   fs.closeSync(baseOutputFile);
 }
 
 async function generate(entityName: string): Promise<number> {
   // Collect all variables and types
   const entityComposition = fetchEntityComposition(entityName);
-  generateInput(entityName, entityComposition);
+  // generateInput(entityName, entityComposition);
+  generateFilters(entityName, entityComposition);
   
 
   return 0;

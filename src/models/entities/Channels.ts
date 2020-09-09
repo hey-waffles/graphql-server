@@ -41,4 +41,4 @@ export class Channel extends Entity {
   rpSceneID?: string;
 }
 
-export const ChannelsModel = getModelForClass(Channel);
+export const ChannelModel = getModelForClass(Channel);

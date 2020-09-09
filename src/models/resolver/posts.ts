@@ -4,9 +4,13 @@ import { BaseResolver } from "./resolver";
 import { PostInput } from "./types/post-input";
 import { DeleteResponse } from "../entities/DeleteResponse";
 import { Options } from "./types/base-input";
+import { generateFilterType } from "type-graphql-filter";
+import { UpdateResponse } from "../entities/UpdateResponse";
+
+const filterType: () => new () => {} = generateFilterType(Post);
 
 /**
- * Resolves requests to the Post schema
+ * Resolves Post queries
  */
 @Resolver()
 export class PostResolver extends BaseResolver {
@@ -22,29 +26,22 @@ export class PostResolver extends BaseResolver {
   }
 
   /**
-   * Fetches a collection of post documents based on filters and options
-   * @param options The options to format the response documents by
+   * Fetches the post documents matching the filter and options
    */
   @Query(() => [Post])
-  async posts(@Args() options?: Options) {
-    return super.resolvers(null, options);
+  async posts(
+    @Arg("filters", filterType, {nullable: true}) filters?: any,
+    @Args() options?: Options
+  ): Promise<Post[]> {
+    return await super.resolvers(filters, options);
   }
 
   /**
    * Creates a new post document
-   * @param data The data to create a new Post document
+   * @param data The data object to make into a new post
    */
   @Mutation(() => Post)
-  async newPost(@Arg("data") data: PostInput): Promise<Post> {
-    // Ensure author exists
-    // Ensure channel exists
-    // Update scene, if any
-
-    // Calculate words
-    if(data.content) {
-      data.words = data.content!.trim().split(/\s+/).length;
-    }
-    
+  newPost(@Arg("data") data: PostInput): Promise<Post> {
     return super.newResolver(data);
   }
 
@@ -53,12 +50,25 @@ export class PostResolver extends BaseResolver {
    * @param _id The id of the document to update
    * @param data The data to replace in the document
    */
-  @Mutation(() => Post)
-  async updatePost(
+  @Mutation(() => UpdateResponse)
+  updatePost(
     @Arg("_id") _id: string,
     @Arg("data") data: PostInput
-  ): Promise<Post> {
+  ): Promise<UpdateResponse> {
     return super.updateResolver(_id, data)
+  }
+
+  /**
+   * Updates a single post document
+   * @param data The data to replace in the document
+   * @param filters The filters to select the data to replace in the document
+   */
+  @Mutation(() => UpdateResponse)
+  updatePosts(
+    @Arg("data") data: PostInput,
+    @Arg("filters", filterType, {nullable: true}) filters?: any
+  ): Promise<UpdateResponse> {
+    return super.updateResolvers(data, filters);
   }
 
   /**
@@ -66,7 +76,16 @@ export class PostResolver extends BaseResolver {
    * @param _id The id of the post document to delete
    */
   @Mutation(() => DeleteResponse)
-  async deletePost(@Arg("_id") _id: string): Promise<DeleteResponse> {   
+  deletePost(@Arg("_id") _id: string): Promise<DeleteResponse> {
     return super.deleteResolver(_id);
+  }
+
+  /**
+   * Deletes a single post document
+   * @param filters The id of the post document to delete
+   */
+  @Mutation(() => DeleteResponse)
+  async deletePosts(@Arg("filters", filterType, {nullable: true}) filters?: any): Promise<DeleteResponse> {
+    return super.deleteResolvers(filters);
   }
 }

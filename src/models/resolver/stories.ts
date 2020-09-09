@@ -3,8 +3,16 @@ import { Story, StoryModel } from "../entities/Stories";
 import { BaseResolver } from "./resolver";
 import { StoryInput } from "./types/story-input";
 import { Options } from "./types/base-input";
+import { generateFilterType } from "type-graphql-filter";
+import { UpdateResponse } from "../entities/UpdateResponse";
+import { DeleteResponse } from "../entities/DeleteResponse";
 
 
+const filterType: () => new () => {} = generateFilterType(Story);
+
+/**
+ * Resolves Story queries
+ */
 @Resolver()
 export class StoryResolver extends BaseResolver {
   protected model = StoryModel;
@@ -19,20 +27,22 @@ export class StoryResolver extends BaseResolver {
   }
 
   /**
-   * Fetches a collection of stories from the filter and options
-   * @param options The options to filter by non-data information
+   * Fetches the story documents matching the filter and options
    */
   @Query(() => [Story])
-  async Stories(@Args() options: Options): Promise<Story[]> {
-    return super.resolvers(null, options);
+  async stories(
+    @Arg("filters", filterType, {nullable: true}) filters?: any,
+    @Args() options?: Options
+  ): Promise<Story[]> {
+    return await super.resolvers(filters, options);
   }
 
   /**
    * Creates a new story document
-   * @param data The data to create a new story document
+   * @param data The data object to make into a new story
    */
   @Mutation(() => Story)
-  async newStory(@Arg("data")data: StoryInput): Promise<Story> {
+  newStory(@Arg("data") data: StoryInput): Promise<Story> {
     return super.newResolver(data);
   }
 
@@ -41,20 +51,42 @@ export class StoryResolver extends BaseResolver {
    * @param _id The id of the document to update
    * @param data The data to replace in the document
    */
-  @Mutation(() => Story)
-  async updateStory(
+  @Mutation(() => UpdateResponse)
+  updateStory(
     @Arg("_id") _id: string,
     @Arg("data") data: StoryInput
-  ): Promise<Story> {
+  ): Promise<UpdateResponse> {
     return super.updateResolver(_id, data)
+  }
+
+  /**
+   * Updates a single story document
+   * @param data The data to replace in the document
+   * @param filters The filters to select the data to replace in the document
+   */
+  @Mutation(() => UpdateResponse)
+  updateStories(
+    @Arg("data") data: StoryInput,
+    @Arg("filters", filterType, {nullable: true}) filters?: any
+  ): Promise<UpdateResponse> {
+    return super.updateResolvers(data, filters);
   }
 
   /**
    * Deletes a single story document
    * @param _id The id of the story document to delete
    */
-  @Mutation(() => Boolean)
-  async deleteStory(@Arg("_id") _id: string) {
+  @Mutation(() => DeleteResponse)
+  deleteStory(@Arg("_id") _id: string): Promise<DeleteResponse> {
     return super.deleteResolver(_id);
+  }
+
+  /**
+   * Deletes a single story document
+   * @param filters The id of the story document to delete
+   */
+  @Mutation(() => DeleteResponse)
+  async deleteStories(@Arg("filters", filterType, {nullable: true}) filters?: any): Promise<DeleteResponse> {
+    return super.deleteResolvers(filters);
   }
 }

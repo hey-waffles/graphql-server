@@ -1,5 +1,5 @@
 import { InputType, Field } from "type-graphql";
-import { Egotisms } from "../../entities/Egotisms";
+import { Egotism } from "../../entities/Egotisms";
 
 /**
  * The input for creating new Egotisms
@@ -9,13 +9,13 @@ import { Egotisms } from "../../entities/Egotisms";
  * @var high The high bound for a random number to hit
  */
 @InputType()
-export class EgotismsInput implements Partial<Egotisms> {
-  @Field()
-  saying: string;
+export class EgotismInput implements Partial<Egotism> {
+  @Field({ nullable: true })
+  saying?: string;
 
-  @Field()
-  low: Number;
+  @Field({ nullable: true })
+  low?: Number;
 
-  @Field()
-  high: Number;
+  @Field({ nullable: true })
+  high?: Number;
 }

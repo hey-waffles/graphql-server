@@ -1,5 +1,7 @@
-import { ObjectType, Field, ID, Int } from "type-graphql";
-import { prop as Property, getModelForClass } from "@typegoose/typegoose";
+import { ObjectType, Field, Int } from "type-graphql";
+import { prop, getModelForClass } from "@typegoose/typegoose";
+import { Entity, stringFilters, numberFilters } from "./Entities";
+import { Filter } from "type-graphql-filter";
 
 /**
  * A model for a collection of sayings meant to boost the ego of an individual
@@ -10,21 +12,22 @@ import { prop as Property, getModelForClass } from "@typegoose/typegoose";
  * @var high The high value for calculating random egotisms
  */
 @ObjectType({ description: "The Egotisms model"})
-export class Egotisms {
-  @Field(() => ID)
-  id: string;
+export class Egotism extends Entity {
 
   @Field()
-  @Property()
+  @Filter(stringFilters)
+  @prop()
   saying: String;
   
   @Field(_type => Int)
-  @Property()
+  @Filter(numberFilters, _type => Int)
+  @prop()
   low: Number;
 
   @Field(_type => Int)
-  @Property()
+  @Filter(numberFilters, _type => Int)
+  @prop()
   high: Number;
 }
 
-export const EgotismsModel = getModelForClass(Egotisms);
+export const EgotismModel = getModelForClass(Egotism);

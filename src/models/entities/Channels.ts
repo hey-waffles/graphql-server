@@ -1,6 +1,7 @@
 import { ObjectType, Field} from "type-graphql";
 import { prop, getModelForClass } from "@typegoose/typegoose";
-import { Entity } from "./Entities";
+import { Entity, stringFilters, booleanFilters, idFilters, dateFilters } from "./Entities";
+import { Filter } from "type-graphql-filter";
 
 /**
  * The model collecting Channels Ozone is connected to for multiple purposes
@@ -15,24 +16,29 @@ import { Entity } from "./Entities";
 @ObjectType({ description: "The Channels used for specific Ozone purposes"})
 export class Channel extends Entity {
   @Field()
+  @Filter(stringFilters)
   @prop({ required: true })
   channelName: string;
 
   @Field()
+  @Filter(stringFilters)
   @prop({ required: true })
   discordChannelID: string;
 
   @Field()
+  @Filter(booleanFilters)
   @prop({ default: false })
   isRPChannel: boolean;
 
   @Field()
+  @Filter(dateFilters, _type => Date)
   @prop({ default: new Date(0) })
   rpLastPulledAt: Date;
 
   @Field({ nullable: true })
+  @Filter(idFilters)
   @prop()
   rpSceneID?: string;
 }
 
-export const ChannelsModel = getModelForClass(Channel);
+export const ChannelModel = getModelForClass(Channel);

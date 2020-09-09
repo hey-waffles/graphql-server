@@ -1,7 +1,8 @@
 
 import { ObjectType, Field, Int } from "type-graphql";
-import { Entity } from "./Entities";
+import { Entity, stringFilters, dateFilters, booleanFilters, idFilters, numberFilters } from "./Entities";
 import { prop, getModelForClass } from "@typegoose/typegoose";
+import { Filter } from "type-graphql-filter";
 
 /**
  * A roleplaying scene
@@ -20,50 +21,62 @@ import { prop, getModelForClass } from "@typegoose/typegoose";
 @ObjectType({ description: "Roleplaying scenes" })
 export class Scene extends Entity {
   @Field()
+  @Filter(stringFilters)
   @prop({ required: true })
   title: string;
 
   @Field({ nullable: true })
+  @Filter(stringFilters)
   @prop({ default: "" })
   description?: string;
 
   @Field()
+  @Filter(idFilters)
   @prop({ required: true })
   storyID: string;
   
   @Field(_type => [String])
+  @Filter(idFilters)
   @prop({ default: [] })
   discordAuthorIDs: string[]
 
   @Field({ nullable: true })
+  @Filter(idFilters)
   @prop()
   arcID?: string;
 
   @Field(_type => Int, { nullable: true })
+  @Filter(numberFilters, _type => Int)
   @prop()
   order?: number;
   
   @Field(_type => Int)
+  @Filter(numberFilters, _type => Int)
   @prop({ default: 0 })
   words?: number;
 
   @Field(_type => Int)
+  @Filter(numberFilters, _type => Int)
   @prop({ default: 0 })
   rewindWords?: number;
 
   @Field()
+  @Filter(booleanFilters, _type => Boolean)
   @prop({ default: false })
   inProgress?: boolean;
 
   @Field({ nullable: true })
+  @Filter(dateFilters, _type => Date)
   @prop()
   startDate?: Date;
 
   @Field({ nullable: true })
+  @Filter(dateFilters, _type => Date)
   @prop()
   endDate?: Date;
 
   @Field({ nullable: true })
+  @Filter(stringFilters)
   @prop()
   driveLink?: string;
 }

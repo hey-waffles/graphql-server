@@ -14,6 +14,67 @@ type Arc {
   words: Int
 }
 
+input ArcCondition {
+  description_eq: String
+  description_like: String
+  description_ne: String
+  operator: BaseOperator
+  order_eq: Int
+  order_gt: Int
+  order_gte: Int
+  order_lt: Int
+  order_lte: Int
+  order_ne: Int
+  rewindWords_eq: Int
+  rewindWords_gt: Int
+  rewindWords_gte: Int
+  rewindWords_lt: Int
+  rewindWords_lte: Int
+  rewindWords_ne: Int
+  storyID_eq: String
+  storyID_ne: String
+  title_eq: String
+  title_like: String
+  title_ne: String
+  words_eq: Int
+  words_gt: Int
+  words_gte: Int
+  words_lt: Int
+  words_lte: Int
+  words_ne: Int
+}
+
+input ArcFilter {
+  conditions: [ArcCondition!]
+  description_eq: String
+  description_like: String
+  description_ne: String
+  operator: BaseOperator
+  order_eq: Int
+  order_gt: Int
+  order_gte: Int
+  order_lt: Int
+  order_lte: Int
+  order_ne: Int
+  rewindWords_eq: Int
+  rewindWords_gt: Int
+  rewindWords_gte: Int
+  rewindWords_lt: Int
+  rewindWords_lte: Int
+  rewindWords_ne: Int
+  storyID_eq: String
+  storyID_ne: String
+  title_eq: String
+  title_like: String
+  title_ne: String
+  words_eq: Int
+  words_gt: Int
+  words_gte: Int
+  words_lt: Int
+  words_lte: Int
+  words_ne: Int
+}
+
 input ArcInput {
   description: String
   order: Int
@@ -30,9 +91,33 @@ type Author {
   name: String!
 }
 
+input AuthorCondition {
+  discordUserID_eq: String
+  discordUserID_ne: String
+  name_eq: String
+  name_like: String
+  name_ne: String
+  operator: BaseOperator
+}
+
+input AuthorFilter {
+  conditions: [AuthorCondition!]
+  discordUserID_eq: String
+  discordUserID_ne: String
+  name_eq: String
+  name_like: String
+  name_ne: String
+  operator: BaseOperator
+}
+
 input AuthorInput {
   discordUserID: String
   name: String
+}
+
+enum BaseOperator {
+  AND
+  OR
 }
 
 """The Channels used for specific Ozone purposes"""
@@ -43,6 +128,47 @@ type Channel {
   isRPChannel: Boolean!
   rpLastPulledAt: DateTime!
   rpSceneID: String
+}
+
+input ChannelCondition {
+  channelName_eq: String
+  channelName_like: String
+  channelName_ne: String
+  discordChannelID_eq: String
+  discordChannelID_like: String
+  discordChannelID_ne: String
+  isRPChannel_eq: String
+  isRPChannel_ne: String
+  operator: BaseOperator
+  rpLastPulledAt_eq: DateTime
+  rpLastPulledAt_gt: DateTime
+  rpLastPulledAt_gte: DateTime
+  rpLastPulledAt_lt: DateTime
+  rpLastPulledAt_lte: DateTime
+  rpLastPulledAt_ne: DateTime
+  rpSceneID_eq: String
+  rpSceneID_ne: String
+}
+
+input ChannelFilter {
+  channelName_eq: String
+  channelName_like: String
+  channelName_ne: String
+  conditions: [ChannelCondition!]
+  discordChannelID_eq: String
+  discordChannelID_like: String
+  discordChannelID_ne: String
+  isRPChannel_eq: String
+  isRPChannel_ne: String
+  operator: BaseOperator
+  rpLastPulledAt_eq: DateTime
+  rpLastPulledAt_gt: DateTime
+  rpLastPulledAt_gte: DateTime
+  rpLastPulledAt_lt: DateTime
+  rpLastPulledAt_lte: DateTime
+  rpLastPulledAt_ne: DateTime
+  rpSceneID_eq: String
+  rpSceneID_ne: String
 }
 
 input ChannelInput {
@@ -64,40 +190,94 @@ type DeleteResponse {
 }
 
 """The Egotisms model"""
-type Egotisms {
+type Egotism {
+  _id: ID!
   high: Int!
-  id: ID!
   low: Int!
   saying: String!
 }
 
-input EgotismsInput {
-  high: Float!
-  low: Float!
-  saying: String!
+input EgotismCondition {
+  high_eq: Int
+  high_gt: Int
+  high_gte: Int
+  high_lt: Int
+  high_lte: Int
+  high_ne: Int
+  low_eq: Int
+  low_gt: Int
+  low_gte: Int
+  low_lt: Int
+  low_lte: Int
+  low_ne: Int
+  operator: BaseOperator
+  saying_eq: String
+  saying_like: String
+  saying_ne: String
+}
+
+input EgotismFilter {
+  conditions: [EgotismCondition!]
+  high_eq: Int
+  high_gt: Int
+  high_gte: Int
+  high_lt: Int
+  high_lte: Int
+  high_ne: Int
+  low_eq: Int
+  low_gt: Int
+  low_gte: Int
+  low_lt: Int
+  low_lte: Int
+  low_ne: Int
+  operator: BaseOperator
+  saying_eq: String
+  saying_like: String
+  saying_ne: String
+}
+
+input EgotismInput {
+  high: Float
+  low: Float
+  saying: String
 }
 
 type Mutation {
-  deleteArc(_id: String!): Boolean!
-  deleteAuthor(_id: String!): Boolean!
-  deleteChannel(_id: String!): Boolean!
-  deleteEgotism(id: String!): Boolean!
+  deleteArc(_id: String!): DeleteResponse!
+  deleteArcs(filters: ArcFilter): DeleteResponse!
+  deleteAuthor(_id: String!): DeleteResponse!
+  deleteAuthors(filters: AuthorFilter): DeleteResponse!
+  deleteChannel(_id: String!): DeleteResponse!
+  deleteChannels(filters: ChannelFilter): DeleteResponse!
+  deleteEgotism(_id: String!): DeleteResponse!
+  deleteEgotisms(filters: EgotismFilter): DeleteResponse!
   deletePost(_id: String!): DeleteResponse!
-  deleteScene(_id: String!): Boolean!
-  deleteStory(_id: String!): Boolean!
+  deletePosts(filters: PostFilter): DeleteResponse!
+  deleteScene(_id: String!): DeleteResponse!
+  deleteScenes(filters: SceneFilter): DeleteResponse!
+  deleteStories(filters: StoryFilter): DeleteResponse!
+  deleteStory(_id: String!): DeleteResponse!
   newArc(data: ArcInput!): Arc!
   newAuthor(data: AuthorInput!): Author!
   newChannel(data: ChannelInput!): Channel!
-  newEgotism(data: EgotismsInput!): Egotisms!
+  newEgotism(data: EgotismInput!): Egotism!
   newPost(data: PostInput!): Post!
   newScene(data: SceneInput!): Scene!
   newStory(data: StoryInput!): Story!
-  updateArc(_id: String!, data: ArcInput!): Arc!
-  updateAuthor(_id: String!, data: AuthorInput!): Author!
-  updateChannel(_id: String!, data: ChannelInput!): Channel!
-  updatePost(_id: String!, data: PostInput!): Post!
-  updateScene(_id: String!, data: SceneInput!): Scene!
-  updateStory(_id: String!, data: StoryInput!): Story!
+  updateArc(_id: String!, data: ArcInput!): UpdateResponse!
+  updateArcs(data: ArcInput!, filters: ArcFilter): UpdateResponse!
+  updateAuthor(_id: String!, data: AuthorInput!): UpdateResponse!
+  updateAuthors(data: AuthorInput!, filters: AuthorFilter): UpdateResponse!
+  updateChannel(_id: String!, data: ChannelInput!): UpdateResponse!
+  updateChannels(data: ChannelInput!, filters: ChannelFilter): UpdateResponse!
+  updateEgotism(_id: String!, data: EgotismInput!): UpdateResponse!
+  updateEgotisms(data: EgotismInput!, filters: EgotismFilter): UpdateResponse!
+  updatePost(_id: String!, data: PostInput!): UpdateResponse!
+  updatePosts(data: PostInput!, filters: PostFilter): UpdateResponse!
+  updateScene(_id: String!, data: SceneInput!): UpdateResponse!
+  updateScenes(data: SceneInput!, filters: SceneFilter): UpdateResponse!
+  updateStories(data: StoryInput!, filters: StoryFilter): UpdateResponse!
+  updateStory(_id: String!, data: StoryInput!): UpdateResponse!
 }
 
 """Roleplaying posts"""
@@ -115,6 +295,81 @@ type Post {
   words: Int!
 }
 
+input PostCondition {
+  content_eq: String
+  content_like: String
+  content_ne: String
+  discordAuthorID_eq: String
+  discordAuthorID_ne: String
+  discordChannelID_eq: String
+  discordChannelID_ne: String
+  discordMessageID_eq: String
+  discordMessageID_ne: String
+  editDate_eq: DateTime
+  editDate_gt: DateTime
+  editDate_gte: DateTime
+  editDate_lt: DateTime
+  editDate_lte: DateTime
+  editDate_ne: DateTime
+  isBorder_eq: Boolean
+  isBorder_ne: Boolean
+  isRewind_eq: Boolean
+  isRewind_ne: Boolean
+  operator: BaseOperator
+  postDate_eq: DateTime
+  postDate_gt: DateTime
+  postDate_gte: DateTime
+  postDate_lt: DateTime
+  postDate_lte: DateTime
+  postDate_ne: DateTime
+  sceneID_eq: String
+  sceneID_ne: String
+  words_eq: Int
+  words_gt: Int
+  words_gte: Int
+  words_lt: Int
+  words_lte: Int
+  words_ne: Int
+}
+
+input PostFilter {
+  conditions: [PostCondition!]
+  content_eq: String
+  content_like: String
+  content_ne: String
+  discordAuthorID_eq: String
+  discordAuthorID_ne: String
+  discordChannelID_eq: String
+  discordChannelID_ne: String
+  discordMessageID_eq: String
+  discordMessageID_ne: String
+  editDate_eq: DateTime
+  editDate_gt: DateTime
+  editDate_gte: DateTime
+  editDate_lt: DateTime
+  editDate_lte: DateTime
+  editDate_ne: DateTime
+  isBorder_eq: Boolean
+  isBorder_ne: Boolean
+  isRewind_eq: Boolean
+  isRewind_ne: Boolean
+  operator: BaseOperator
+  postDate_eq: DateTime
+  postDate_gt: DateTime
+  postDate_gte: DateTime
+  postDate_lt: DateTime
+  postDate_lte: DateTime
+  postDate_ne: DateTime
+  sceneID_eq: String
+  sceneID_ne: String
+  words_eq: Int
+  words_gt: Int
+  words_gte: Int
+  words_lt: Int
+  words_lte: Int
+  words_ne: Int
+}
+
 input PostInput {
   content: String
   discordAuthorID: String
@@ -130,18 +385,18 @@ input PostInput {
 
 type Query {
   arc(_id: String!): Arc!
-  arcs(limit: Int = 25, skip: Int = 0): [Arc!]!
+  arcs(filters: ArcFilter, limit: Int = 25, skip: Int = 0, sort: String): [Arc!]!
   author(_id: String!): Author!
-  authors(limit: Int = 25, skip: Int = 0): [Author!]!
+  authors(filters: AuthorFilter, limit: Int = 25, skip: Int = 0, sort: String): [Author!]!
   channel(_id: String!): Channel!
-  channels(limit: Int = 25, skip: Int = 0): [Channel!]!
-  egotismByID(id: String!): Egotisms!
-  egotisms: [Egotisms!]!
+  channels(filters: ChannelFilter, limit: Int = 25, skip: Int = 0, sort: String): [Channel!]!
+  egotism(_id: String!): Egotism!
+  egotisms(filters: EgotismFilter, limit: Int = 25, skip: Int = 0, sort: String): [Egotism!]!
   post(_id: String!): Post!
-  posts(limit: Int = 25, skip: Int = 0): [Post!]!
+  posts(filters: PostFilter, limit: Int = 25, skip: Int = 0, sort: String): [Post!]!
   scene(_id: String!): Scene!
-  scenes(limit: Int = 25, skip: Int = 0): [Scene!]!
-  Stories(limit: Int = 25, skip: Int = 0): [Story!]!
+  scenes(filters: SceneFilter, limit: Int = 25, skip: Int = 0, sort: String): [Scene!]!
+  stories(filters: StoryFilter, limit: Int = 25, skip: Int = 0, sort: String): [Story!]!
   story(_id: String!): Story!
 }
 
@@ -160,6 +415,109 @@ type Scene {
   storyID: String!
   title: String!
   words: Int!
+}
+
+input SceneCondition {
+  arcID_eq: String
+  arcID_ne: String
+  description_eq: String
+  description_like: String
+  description_ne: String
+  discordAuthorIDs_eq: String
+  discordAuthorIDs_ne: String
+  driveLink_eq: String
+  driveLink_like: String
+  driveLink_ne: String
+  endDate_eq: DateTime
+  endDate_gt: DateTime
+  endDate_gte: DateTime
+  endDate_lt: DateTime
+  endDate_lte: DateTime
+  endDate_ne: DateTime
+  inProgress_eq: Boolean
+  inProgress_ne: Boolean
+  operator: BaseOperator
+  order_eq: Int
+  order_gt: Int
+  order_gte: Int
+  order_lt: Int
+  order_lte: Int
+  order_ne: Int
+  rewindWords_eq: Int
+  rewindWords_gt: Int
+  rewindWords_gte: Int
+  rewindWords_lt: Int
+  rewindWords_lte: Int
+  rewindWords_ne: Int
+  startDate_eq: DateTime
+  startDate_gt: DateTime
+  startDate_gte: DateTime
+  startDate_lt: DateTime
+  startDate_lte: DateTime
+  startDate_ne: DateTime
+  storyID_eq: String
+  storyID_ne: String
+  title_eq: String
+  title_like: String
+  title_ne: String
+  words_eq: Int
+  words_gt: Int
+  words_gte: Int
+  words_lt: Int
+  words_lte: Int
+  words_ne: Int
+}
+
+input SceneFilter {
+  arcID_eq: String
+  arcID_ne: String
+  conditions: [SceneCondition!]
+  description_eq: String
+  description_like: String
+  description_ne: String
+  discordAuthorIDs_eq: String
+  discordAuthorIDs_ne: String
+  driveLink_eq: String
+  driveLink_like: String
+  driveLink_ne: String
+  endDate_eq: DateTime
+  endDate_gt: DateTime
+  endDate_gte: DateTime
+  endDate_lt: DateTime
+  endDate_lte: DateTime
+  endDate_ne: DateTime
+  inProgress_eq: Boolean
+  inProgress_ne: Boolean
+  operator: BaseOperator
+  order_eq: Int
+  order_gt: Int
+  order_gte: Int
+  order_lt: Int
+  order_lte: Int
+  order_ne: Int
+  rewindWords_eq: Int
+  rewindWords_gt: Int
+  rewindWords_gte: Int
+  rewindWords_lt: Int
+  rewindWords_lte: Int
+  rewindWords_ne: Int
+  startDate_eq: DateTime
+  startDate_gt: DateTime
+  startDate_gte: DateTime
+  startDate_lt: DateTime
+  startDate_lte: DateTime
+  startDate_ne: DateTime
+  storyID_eq: String
+  storyID_ne: String
+  title_eq: String
+  title_like: String
+  title_ne: String
+  words_eq: Int
+  words_gt: Int
+  words_gte: Int
+  words_lt: Int
+  words_lte: Int
+  words_ne: Int
 }
 
 input SceneInput {
@@ -190,6 +548,85 @@ type Story {
   words: Int!
 }
 
+input StoryCondition {
+  description_eq: String
+  description_like: String
+  description_ne: String
+  discordAuthorIDs_eq: String
+  discordAuthorIDs_ne: String
+  driveLink_eq: String
+  driveLink_like: String
+  driveLink_ne: String
+  lastPostAt_eq: DateTime
+  lastPostAt_gt: DateTime
+  lastPostAt_gte: DateTime
+  lastPostAt_lt: DateTime
+  lastPostAt_lte: DateTime
+  lastPostAt_ne: DateTime
+  operator: BaseOperator
+  rewindWords_eq: Int
+  rewindWords_gt: Int
+  rewindWords_gte: Int
+  rewindWords_lt: Int
+  rewindWords_lte: Int
+  rewindWords_ne: Int
+  startDate_eq: DateTime
+  startDate_gt: DateTime
+  startDate_gte: DateTime
+  startDate_lt: DateTime
+  startDate_lte: DateTime
+  startDate_ne: DateTime
+  title_eq: String
+  title_like: String
+  title_ne: String
+  words_eq: Int
+  words_gt: Int
+  words_gte: Int
+  words_lt: Int
+  words_lte: Int
+  words_ne: Int
+}
+
+input StoryFilter {
+  conditions: [StoryCondition!]
+  description_eq: String
+  description_like: String
+  description_ne: String
+  discordAuthorIDs_eq: String
+  discordAuthorIDs_ne: String
+  driveLink_eq: String
+  driveLink_like: String
+  driveLink_ne: String
+  lastPostAt_eq: DateTime
+  lastPostAt_gt: DateTime
+  lastPostAt_gte: DateTime
+  lastPostAt_lt: DateTime
+  lastPostAt_lte: DateTime
+  lastPostAt_ne: DateTime
+  operator: BaseOperator
+  rewindWords_eq: Int
+  rewindWords_gt: Int
+  rewindWords_gte: Int
+  rewindWords_lt: Int
+  rewindWords_lte: Int
+  rewindWords_ne: Int
+  startDate_eq: DateTime
+  startDate_gt: DateTime
+  startDate_gte: DateTime
+  startDate_lt: DateTime
+  startDate_lte: DateTime
+  startDate_ne: DateTime
+  title_eq: String
+  title_like: String
+  title_ne: String
+  words_eq: Int
+  words_gt: Int
+  words_gte: Int
+  words_lt: Int
+  words_lte: Int
+  words_ne: Int
+}
+
 input StoryInput {
   description: String
   discordAuthorIDs: [String!] = []
@@ -199,4 +636,10 @@ input StoryInput {
   startDate: DateTime
   title: String
   words: Int = 0
+}
+
+type UpdateResponse {
+  n: Float
+  nModified: Float
+  ok: Float
 }

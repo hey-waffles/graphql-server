@@ -1,51 +1,91 @@
-import { Resolver, Arg, Query, Mutation } from "type-graphql";
-import { Egotisms, EgotismsModel } from "../entities/Egotisms";
-import { EgotismsInput } from "./types/egotisms-input";
+import { Resolver, Arg, Query, Mutation, Args } from "type-graphql";
+import { Egotism, EgotismModel } from "../entities/Egotisms";
+import { EgotismInput } from "./types/egotisms-input";
+import { BaseResolver } from "./resolver";
+import { generateFilterType } from "type-graphql-filter";
+import { Options } from "./types/base-input";
+import { UpdateResponse } from "../entities/UpdateResponse";
+import { DeleteResponse } from "../entities/DeleteResponse";
+
+const filterType: () => new () => {} = generateFilterType(Egotism);
 
 /**
- * The GQL Resolver for viewing and editing egostisms 
+ * Resolves Egotism queries
  */
 @Resolver()
-export class EgotismResolver {
+export class EgotismResolver extends BaseResolver {
+  protected model = EgotismModel;
+
   /**
-   * Fetches a single Egotism by a given id
-   * @param id The id of the Egotism to fetch
+   * Fetches an Egotism document matching the given id
+   * @param _id The id of the Egotism document to return
    */
-  @Query((_returns: any) => Egotisms, { nullable: false })
-  async egotismByID(@Arg("id") id: string) {
-    return await EgotismsModel.findById({_id:id});
+  @Query(() => Egotism)
+  async egotism(@Arg("_id") _id: string): Promise<Egotism> {
+    return super.resolver(_id);
   }
 
   /**
-   * Fetches all egotisms
-   * TODO - add searching
+   * Fetches the Egotism documents matching the filter and options
    */
-  @Query(() => [Egotisms])
-  async egotisms() {
-    return await EgotismsModel.find();
+  @Query(() => [Egotism])
+  async egotisms(
+    @Arg("filters", filterType, {nullable: true}) filters?: any,
+    @Args() options?: Options
+  ): Promise<Egotism[]> {
+    return await super.resolvers(filters, options);
   }
 
   /**
-   * Creates a new Egotism
-   * @param data The data to create new Egotism
+   * Creates a new Egotism document
+   * @param data The data object to make into a new Egotism
    */
-  @Mutation(() => Egotisms)
-  async newEgotism(@Arg("data"){ saying, low, high }: EgotismsInput): Promise<Egotisms> {
-    const egotism = (await EgotismsModel.create({
-      saying,
-      low,
-      high
-    })).save();
-    return egotism;
+  @Mutation(() => Egotism)
+  newEgotism(@Arg("data") data: EgotismInput): Promise<Egotism> {
+    return super.newResolver(data);
   }
 
   /**
-   * Deletes an egotism
-   * @param id The id of the egotism to delete
+   * Updates a single Egotism document
+   * @param _id The id of the document to update
+   * @param data The data to replace in the document
    */
-  @Mutation(() => Boolean)
-  async deleteEgotism(@Arg("id") id: string) {
-    await EgotismsModel.deleteOne({id});
-    return true;
+  @Mutation(() => UpdateResponse)
+  updateEgotism(
+    @Arg("_id") _id: string,
+    @Arg("data") data: EgotismInput
+  ): Promise<UpdateResponse> {
+    return super.updateResolver(_id, data)
+  }
+
+  /**
+   * Updates a single Egotism document
+   * @param data The data to replace in the document
+   * @param filters The filters to select the data to replace in the document
+   */
+  @Mutation(() => UpdateResponse)
+  updateEgotisms(
+    @Arg("data") data: EgotismInput,
+    @Arg("filters", filterType, {nullable: true}) filters?: any
+  ): Promise<UpdateResponse> {
+    return super.updateResolvers(data, filters);
+  }
+
+  /**
+   * Deletes a single Egotism document
+   * @param _id The id of the Egotism document to delete
+   */
+  @Mutation(() => DeleteResponse)
+  deleteEgotism(@Arg("_id") _id: string): Promise<DeleteResponse> {
+    return super.deleteResolver(_id);
+  }
+
+  /**
+   * Deletes a single Egotism document
+   * @param filters The id of the Egotism document to delete
+   */
+  @Mutation(() => DeleteResponse)
+  async deleteEgotisms(@Arg("filters", filterType, {nullable: true}) filters?: any): Promise<DeleteResponse> {
+    return super.deleteResolvers(filters);
   }
 }

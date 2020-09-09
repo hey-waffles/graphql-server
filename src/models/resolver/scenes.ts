@@ -3,9 +3,14 @@ import { Scene, SceneModel } from "../entities/Scenes";
 import { BaseResolver } from "./resolver";
 import { SceneInput } from "./types/scene-input";
 import { Options } from "./types/base-input";
+import { generateFilterType } from "type-graphql-filter";
+import { UpdateResponse } from "../entities/UpdateResponse";
+import { DeleteResponse } from "../entities/DeleteResponse";
+
+const filterType: () => new () => {} = generateFilterType(Scene);
 
 /**
- * The resolver for the scene schema
+ * Resolves Scene queries
  */
 @Resolver()
 export class SceneResolver extends BaseResolver {
@@ -21,20 +26,22 @@ export class SceneResolver extends BaseResolver {
   }
 
   /**
-   * Fetches a collection of scenes determined by the given filter and options
-   * @param options The options to format the returned documents
+   * Fetches the scene documents matching the filter and options
    */
   @Query(() => [Scene])
-  async scenes(@Args() options: Options): Promise<Scene[]> {
-    return super.resolvers(null, options);
+  async scenes(
+    @Arg("filters", filterType, {nullable: true}) filters?: any,
+    @Args() options?: Options
+  ): Promise<Scene[]> {
+    return await super.resolvers(filters, options);
   }
 
   /**
    * Creates a new scene document
-   * @param data The data to create a new scene
+   * @param data The data object to make into a new scene
    */
   @Mutation(() => Scene)
-  async newScene(@Arg("data")data: SceneInput): Promise<Scene> {
+  newScene(@Arg("data") data: SceneInput): Promise<Scene> {
     return super.newResolver(data);
   }
 
@@ -43,20 +50,42 @@ export class SceneResolver extends BaseResolver {
    * @param _id The id of the document to update
    * @param data The data to replace in the document
    */
-  @Mutation(() => Scene)
-  async updateScene(
+  @Mutation(() => UpdateResponse)
+  updateScene(
     @Arg("_id") _id: string,
     @Arg("data") data: SceneInput
-  ): Promise<Scene> {
+  ): Promise<UpdateResponse> {
     return super.updateResolver(_id, data)
+  }
+
+  /**
+   * Updates a single scene document
+   * @param data The data to replace in the document
+   * @param filters The filters to select the data to replace in the document
+   */
+  @Mutation(() => UpdateResponse)
+  updateScenes(
+    @Arg("data") data: SceneInput,
+    @Arg("filters", filterType, {nullable: true}) filters?: any
+  ): Promise<UpdateResponse> {
+    return super.updateResolvers(data, filters);
   }
 
   /**
    * Deletes a single scene document
    * @param _id The id of the scene document to delete
    */
-  @Mutation(() => Boolean)
-  async deleteScene(@Arg("_id") _id: string) {
+  @Mutation(() => DeleteResponse)
+  deleteScene(@Arg("_id") _id: string): Promise<DeleteResponse> {
     return super.deleteResolver(_id);
+  }
+
+  /**
+   * Deletes a single scene document
+   * @param filters The id of the scene document to delete
+   */
+  @Mutation(() => DeleteResponse)
+  async deleteScenes(@Arg("filters", filterType, {nullable: true}) filters?: any): Promise<DeleteResponse> {
+    return super.deleteResolvers(filters);
   }
 }

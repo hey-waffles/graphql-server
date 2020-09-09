@@ -28,4 +28,7 @@ export class Options {
   @Min(1)
   @Max(50)
   limit: number = 25;
+
+  @Field({ nullable: true })
+  sort?: string;
 }

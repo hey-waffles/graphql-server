@@ -1,6 +1,7 @@
 import { ObjectType, Field } from "type-graphql";
-import { Entity } from "./Entities";
+import { Entity, stringFilters, idFilters } from "./Entities";
 import { prop, getModelForClass } from "@typegoose/typegoose";
+import { Filter } from "type-graphql-filter";
 
 /**
  * The authors for roleplaying
@@ -11,10 +12,12 @@ import { prop, getModelForClass } from "@typegoose/typegoose";
 @ObjectType({ description: "Roleplaying Authors"})
 export class Author extends Entity {
   @Field()
+  @Filter(stringFilters)
   @prop({ required: true })
   name: string;
 
   @Field()
+  @Filter(idFilters)
   @prop({ required: true })
   discordUserID: string;
 }

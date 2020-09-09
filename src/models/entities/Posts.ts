@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int } from "type-graphql";
-import { Entity } from "./Entities";
+import { Entity, stringFilters, idFilters, numberFilters, booleanFilters, dateFilters } from "./Entities";
 import { prop, getModelForClass } from "@typegoose/typegoose";
+import { Filter } from "type-graphql-filter";
 
 /**
  * A roleplaying post
@@ -19,42 +20,52 @@ import { prop, getModelForClass } from "@typegoose/typegoose";
 export class Post extends Entity {
 
   @Field()
+  @Filter(stringFilters)
   @prop({ required: true })
   content: string;
 
   @Field()
+  @Filter(idFilters)
   @prop({ required: true })
   discordAuthorID: string;
 
   @Field()
+  @Filter(idFilters)
   @prop({ required: true })
   discordChannelID: string;
 
   @Field()
+  @Filter(idFilters)
   @prop({ required: true, unique: true })
   discordMessageID: string;
 
   @Field(_type => Int)
+  @Filter(numberFilters, _type => Int)
   @prop({ required: true })
   words: number;
 
   @Field({ nullable: true })
+  @Filter(idFilters)
   @prop()
   sceneID?: string;
 
   @Field()
+  @Filter(booleanFilters, _type => Boolean)
   @prop({ required: true, default: false })
   isBorder: boolean;
 
   @Field()
+  @Filter(booleanFilters, _type => Boolean)
   @prop({ required: true, default: false })
   isRewind: boolean;
 
   @Field()
+  @Filter(dateFilters, _type => Date)
   @prop({ required: true })
   postDate: Date;
 
   @Field( { nullable: true })
+  @Filter(dateFilters, _type => Date)
   @prop()
   editDate?: Date; 
 }

@@ -14,6 +14,67 @@ type Arc {
   words: Int
 }
 
+input ArcCondition {
+  description_eq: String
+  description_like: String
+  description_ne: String
+  operator: BaseOperator
+  order_eq: Int
+  order_gt: Int
+  order_gte: Int
+  order_lt: Int
+  order_lte: Int
+  order_ne: Int
+  rewindWords_eq: Int
+  rewindWords_gt: Int
+  rewindWords_gte: Int
+  rewindWords_lt: Int
+  rewindWords_lte: Int
+  rewindWords_ne: Int
+  storyID_eq: String
+  storyID_ne: String
+  title_eq: String
+  title_like: String
+  title_ne: String
+  words_eq: Int
+  words_gt: Int
+  words_gte: Int
+  words_lt: Int
+  words_lte: Int
+  words_ne: Int
+}
+
+input ArcFilter {
+  conditions: [ArcCondition!]
+  description_eq: String
+  description_like: String
+  description_ne: String
+  operator: BaseOperator
+  order_eq: Int
+  order_gt: Int
+  order_gte: Int
+  order_lt: Int
+  order_lte: Int
+  order_ne: Int
+  rewindWords_eq: Int
+  rewindWords_gt: Int
+  rewindWords_gte: Int
+  rewindWords_lt: Int
+  rewindWords_lte: Int
+  rewindWords_ne: Int
+  storyID_eq: String
+  storyID_ne: String
+  title_eq: String
+  title_like: String
+  title_ne: String
+  words_eq: Int
+  words_gt: Int
+  words_gte: Int
+  words_lt: Int
+  words_lte: Int
+  words_ne: Int
+}
+
 input ArcInput {
   description: String
   order: Int
@@ -33,6 +94,11 @@ type Author {
 input AuthorInput {
   discordUserID: String
   name: String
+}
+
+enum BaseOperator {
+  AND
+  OR
 }
 
 """The Channels used for specific Ozone purposes"""
@@ -78,7 +144,8 @@ input EgotismsInput {
 }
 
 type Mutation {
-  deleteArc(_id: String!): Boolean!
+  deleteArc(_id: String!): DeleteResponse!
+  deleteArcs(filters: ArcFilter): DeleteResponse!
   deleteAuthor(_id: String!): Boolean!
   deleteChannel(_id: String!): Boolean!
   deleteEgotism(id: String!): Boolean!
@@ -92,7 +159,8 @@ type Mutation {
   newPost(data: PostInput!): Post!
   newScene(data: SceneInput!): Scene!
   newStory(data: StoryInput!): Story!
-  updateArc(_id: String!, data: ArcInput!): Arc!
+  updateArc(_id: String!, data: ArcInput!): UpdateResponse!
+  updateArcs(data: ArcInput!, filters: ArcFilter): UpdateResponse!
   updateAuthor(_id: String!, data: AuthorInput!): Author!
   updateChannel(_id: String!, data: ChannelInput!): Channel!
   updatePost(_id: String!, data: PostInput!): Post!
@@ -130,18 +198,18 @@ input PostInput {
 
 type Query {
   arc(_id: String!): Arc!
-  arcs(limit: Int = 25, skip: Int = 0): [Arc!]!
+  arcs(filters: ArcFilter, limit: Int = 25, skip: Int = 0, sort: String): [Arc!]!
   author(_id: String!): Author!
-  authors(limit: Int = 25, skip: Int = 0): [Author!]!
+  authors(limit: Int = 25, skip: Int = 0, sort: String): [Author!]!
   channel(_id: String!): Channel!
-  channels(limit: Int = 25, skip: Int = 0): [Channel!]!
+  channels(limit: Int = 25, skip: Int = 0, sort: String): [Channel!]!
   egotismByID(id: String!): Egotisms!
   egotisms: [Egotisms!]!
   post(_id: String!): Post!
-  posts(limit: Int = 25, skip: Int = 0): [Post!]!
+  posts(limit: Int = 25, skip: Int = 0, sort: String): [Post!]!
   scene(_id: String!): Scene!
-  scenes(limit: Int = 25, skip: Int = 0): [Scene!]!
-  Stories(limit: Int = 25, skip: Int = 0): [Story!]!
+  scenes(limit: Int = 25, skip: Int = 0, sort: String): [Scene!]!
+  Stories(limit: Int = 25, skip: Int = 0, sort: String): [Story!]!
   story(_id: String!): Story!
 }
 
@@ -199,4 +267,10 @@ input StoryInput {
   startDate: DateTime
   title: String
   words: Int = 0
+}
+
+type UpdateResponse {
+  n: Float
+  nModified: Float
+  ok: Float
 }

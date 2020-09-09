@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int } from "type-graphql";
-import { Entity } from "./Entities";
+import { Entity, idFilters, stringFilters, numberFilters } from "./Entities";
 import { prop, getModelForClass } from "@typegoose/typegoose";
+import { Filter } from "type-graphql-filter";
 
 /**
  * An arc connects a collection of scenes within a story
@@ -15,26 +16,32 @@ import { prop, getModelForClass } from "@typegoose/typegoose";
 @ObjectType({ description: "An arc connects a collection of scenes within a story"})
 export class Arc extends Entity {
   @Field()
+  @Filter(stringFilters)
   @prop({ required: true })
   title: string;
 
   @Field()
+  @Filter(stringFilters)
   @prop({ default: "" })
   description: string = "";
 
   @Field(_type => Int, { nullable: true })
+  @Filter(numberFilters, _type => Int)
   @prop()
   order?: number;
-  
+   
   @Field()
+  @Filter(idFilters)
   @prop({ required: true })
   storyID: string;
 
   @Field(_type => Int, { nullable: true })
+  @Filter(numberFilters, _type => Int)
   @prop()
   words?: number;
 
   @Field(_type => Int, { nullable: true })
+  @Filter(numberFilters, _type => Int)
   @prop()
   rewindWords?: number;
 
